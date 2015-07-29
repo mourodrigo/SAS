@@ -17,5 +17,5 @@ D - Decriptografar
 
 Ex: 
 
-./main c /Users/home/Developer/SAS/examplefile.txt /Users/home/Developer/SAS/exampleEncrypted.txt
+./main c /Users/home/Developer/SAS/examplefile.txt /Users/home/Developer/SAS/exampleEncrypted.txt<br>
 ./main c /Users/home/Developer/SAS/exampleEncrypted.txt /Users/home/Developer/SAS/exampleDencrypted.txt
