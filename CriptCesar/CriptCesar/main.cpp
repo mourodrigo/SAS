@@ -9,28 +9,40 @@
 #include <iostream>
 #include <vector>
 #include <string>
+#include <fstream>
 
 using namespace std;
 
-int encrypt(char option,string filePathIn,string filePathOut,int offset){
-    FILE *in, *out;
-    
+int cesarEncrypt(int in, int offset){
+    return in+offset;
+}
+
+int fileManage(char option,string filePathIn,string filePathOut,int offset){
+    FILE *in;
+    ofstream out;
+
     in = fopen(filePathIn.c_str(), "rb");
     if(!in) {
-        printf("Erro: Arquivo de entrada nao encontrado\n");
+        cout << "Erro: Arquivo de entrada nao encontrado " << filePathIn << endl;
         return 0;
     }
 
-    out = fopen(filePathOut.c_str(), "wb");
+    out.open(filePathOut, ofstream::app);
     
     unsigned int character;
     unsigned char ccharacter;
+    
+    if (out.is_open()) {
+        cout << "open";
+    }
     
     while(character!=255){
         ccharacter = getc(in);
         character = ccharacter;
         cout << ccharacter << " - " << character << endl;
-     }
+        out << (unsigned char)cesarEncrypt(character, offset);
+    }
+    out.close();
     return true;
 }
 
@@ -52,7 +64,7 @@ int main(int argc, const char * argv[]) {
                 filePathIn = string(argv[2]);
             break;
             case 3:
-                filePathOut = string(argv[2]);
+                filePathOut = string(argv[3]);
                 break;
             case 4:
                 offset = *(char*)argv[x];
@@ -61,9 +73,11 @@ int main(int argc, const char * argv[]) {
     }
     
     if (option == 'c') {
-        encrypt(option,filePathIn,filePathOut,offset);
+        fileManage(option,filePathIn,filePathOut,offset);
     }
-    
+    if (option == 'd') {
+        fileManage(option,filePathIn,filePathOut,0-offset);
+    }
     std::cout << "CriptCesar!\n";
 
 
