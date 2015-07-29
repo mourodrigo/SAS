@@ -13,11 +13,11 @@
 
 using namespace std;
 
-int cesarEncrypt(int in, int offset){
+unsigned int cesarEncrypt(int in, unsigned int offset){
     return in+offset;
 }
 
-int fileManage(char option,string filePathIn,string filePathOut,int offset){
+int fileManage(char option,string filePathIn,string filePathOut,unsigned int offset){
     FILE *in;
     ofstream out;
 
@@ -39,7 +39,7 @@ int fileManage(char option,string filePathIn,string filePathOut,int offset){
     while(character!=255){
         ccharacter = getc(in);
         character = ccharacter;
-        cout << ccharacter << " - " << character << endl;
+        cout << ccharacter << " - " << character <<  " - " << character+offset<< endl;
         out << (unsigned char)cesarEncrypt(character, offset);
     }
     out.close();
@@ -54,7 +54,7 @@ int main(int argc, const char * argv[]) {
     
     char option = '\0';
     string filePathIn,filePathOut;
-    int offset = 0;
+    unsigned int offset = 0;
     for (int x = 1; x<argc; x++) {
         switch (x) {
             case 1:
@@ -67,7 +67,7 @@ int main(int argc, const char * argv[]) {
                 filePathOut = string(argv[3]);
                 break;
             case 4:
-                offset = *(char*)argv[x];
+                offset = atoi(argv[x]);
             break;
         }
     }
