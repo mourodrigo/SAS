@@ -64,7 +64,7 @@
             isEnabled = "YES">
          </CommandLineArgument>
          <CommandLineArgument
-            argument = "/arquivo/arquivo.txt"
+            argument = "/Users/mourodrigo/Developer/SAS/CriptCesar/CriptCesar/examplefile1.txt"
             isEnabled = "YES">
          </CommandLineArgument>
          <CommandLineArgument
