@@ -9,7 +9,7 @@ A [Cifra de César](https://pt.wikipedia.org/wiki/Cifra_de_C%C3%A9sar), também 
 O código foi implementado em C++ utilizando bibliotecas string, fstream e iostream.
 
 **Utilização.**
-./main <opção> <arquivo de entrada> <arquivo de saida> <offset> <br><br>
+./main [opção] [caminho do arquivo de entrada] [caminho do arquivo de saida] [offset]
 
 Opções: 
 C - Criptografar
@@ -17,5 +17,5 @@ D - Decriptografar
 
 Ex: 
 
-./main c /Users/home/Developer/SAS/examplefile.txt /Users/home/Developer/SAS/exampleEncrypted.txt<br><br><br>
+./main c /Users/home/Developer/SAS/examplefile.txt /Users/home/Developer/SAS/exampleEncrypted.txt<br>
 ./main c /Users/home/Developer/SAS/exampleEncrypted.txt /Users/home/Developer/SAS/exampleDencrypted.txt
