@@ -14,7 +14,7 @@
 using namespace std;
 
 unsigned int cesarEncrypt(int in, unsigned int offset){
-    return in+offset;
+    return in+(offset%255);
 }
 
 int fileManage(char option,string filePathIn,string filePathOut,unsigned int offset){
