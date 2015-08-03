@@ -30,25 +30,48 @@ int fileManage(string filePathIn,string filePathOut,unsigned int offset){
     out.open(filePathOut, ofstream::app);
     
     unsigned int character;
-    unsigned char ccharacter;
+    unsigned char ccharacter = '\0';
     
     if (out.is_open()) {
-        cout << "open";
+        cout << "File in open" << filePathIn << endl;
     }
     
+    vector<vector<unsigned int>> v;
+    
+    int x=0;
     while(character!=255){
+        if (x<offset) {
+            vector<unsigned int> column;
+            v.push_back(column);
+        }
         ccharacter = getc(in);
         character = ccharacter;
-        cout << ccharacter << " - " << character <<  " - " << character+offset<< endl;
-        out << (unsigned char)transposeEncrypt(character, offset);
+        cout << ccharacter << " - " << character << endl;
+        v.at(x%offset).push_back(ccharacter);
+        x++;
     }
+
+    for ( vector<vector<unsigned int>>::iterator vectors = v.begin(); vectors != v.end(); ++vectors )
+    {
+        for ( vector<unsigned int>::iterator ints = (*vectors).begin(); ints != (*vectors).end(); ++ ints )
+        {
+            
+            std::cout << (*ints) << "\n"; // print the strings
+            out << (unsigned char)(*ints);
+        }
+    }
+    
+    //  out << (unsigned char)transposeEncrypt(character, offset);
+    
     out.close();
+    cout << "File out done " << filePathOut << endl;
+
     return true;
 }
 
 int main(int argc, const char * argv[]) {
     // insert code here...
-    std::cout << "CriptCesar!\n";
+    std::cout << "CriptTransposicao!\n";
     
     
     char option = '\0';

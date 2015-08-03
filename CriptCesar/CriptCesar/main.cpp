@@ -33,7 +33,7 @@ int fileManage(string filePathIn,string filePathOut,unsigned int offset){
     unsigned char ccharacter;
     
     if (out.is_open()) {
-        cout << "open";
+        cout << "File in open" << filePathIn << endl;
     }
     
     while(character!=255){
@@ -43,6 +43,8 @@ int fileManage(string filePathIn,string filePathOut,unsigned int offset){
         out << (unsigned char)cesarEncrypt(character, offset);
     }
     out.close();
+    cout << "File out done" << filePathOut << endl;
+
     return true;
 }
 
