@@ -50,16 +50,30 @@ int fileManage(string filePathIn,string filePathOut,unsigned int offset){
         v.at(x%offset).push_back(ccharacter);
         x++;
     }
+//
+//    for ( vector<vector<unsigned int>>::iterator vectors = v.begin(); vectors != v.end(); ++vectors )
+//    {
+//        for ( vector<unsigned int>::iterator ints = (*vectors).begin(); ints != (*vectors).end(); ++ ints )
+//        {
+//            
+//            std::cout << (*ints) << "\n"; // print the strings
+//            out << (unsigned char)(*ints);
+//        }
+//    }
+//    
 
-    for ( vector<vector<unsigned int>>::iterator vectors = v.begin(); vectors != v.end(); ++vectors )
-    {
-        for ( vector<unsigned int>::iterator ints = (*vectors).begin(); ints != (*vectors).end(); ++ ints )
+    
+    
+    for ( int x=0;x<v.size();x++ )
         {
-            
-            std::cout << (*ints) << "\n"; // print the strings
-            out << (unsigned char)(*ints);
+            for ( int y=0;y<v.size();y++ )
+            {
+                
+                out << (unsigned char)v.at(x).at(y);
+            }
         }
-    }
+        
+
     
     //  out << (unsigned char)transposeEncrypt(character, offset);
     
