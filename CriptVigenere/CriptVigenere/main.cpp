@@ -66,7 +66,26 @@ string decrypt(string text, string key)
     return out;
 }
 
-
+vector<unsigned char> fileRead(string filePathIn){
+    FILE *in;
+    
+    in = fopen(filePathIn.c_str(), "rb");
+    if(!in) {
+        cout << "Erro: Arquivo de entrada nao encontrado " << filePathIn << endl;
+    }
+    
+    unsigned int character;
+    unsigned char ccharacter;
+    vector<unsigned char> v;
+    
+    while(character!=255){
+        ccharacter = getc(in);
+        character = ccharacter;
+        cout << ccharacter << " - " << character <<  " - " << endl;
+        v.push_back(ccharacter);
+    }
+    return v;
+}
 
 int main(int argc, const char * argv[]) {
     // insert code here...
