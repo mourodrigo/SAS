@@ -88,6 +88,19 @@ string fileRead(string filePathIn){
     return read;
 }
 
+bool fileWrite(string filePathOut, string content){
+    ofstream out;
+    out.open(filePathOut, ofstream::app);
+    
+    if (out.is_open()) {
+        cout << "File out open" << filePathOut << endl;
+        out << content;
+    }
+    out.close();
+    return true;
+}
+
+
 int main(int argc, const char * argv[]) {
     // insert code here...
     std::cout << "CriptVigenere\n\n";
