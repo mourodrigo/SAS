@@ -66,7 +66,7 @@ string decrypt(string text, string key)
     return out;
 }
 
-vector<unsigned char> fileRead(string filePathIn){
+string fileRead(string filePathIn){
     FILE *in;
     
     in = fopen(filePathIn.c_str(), "rb");
@@ -76,22 +76,23 @@ vector<unsigned char> fileRead(string filePathIn){
     
     unsigned int character;
     unsigned char ccharacter;
-    vector<unsigned char> v;
+    string read;
     
     while(character!=255){
         ccharacter = getc(in);
         character = ccharacter;
         cout << ccharacter << " - " << character <<  " - " << endl;
-        v.push_back(ccharacter);
+        string scharacter(reinterpret_cast<char*>(ccharacter));
+        read.append(string(reinterpret_cast<char*>(ccharacter)));
     }
-    return v;
+    return read;
 }
 
 int main(int argc, const char * argv[]) {
     // insert code here...
     std::cout << "CriptVigenere\n\n";
 //    string key = vigenereKey("VIGENERECIPHER");
-    string original = "Beware the Jabberwock, my son! The jaws that bite, the claws that catch!";
+//    string original = "Beware the Jabberwock, my son! The jaws that bite, the claws that catch!";
     string encrypted = encrypt(original, key);
     string decrypted = decrypt(encrypted, key);
     
@@ -100,7 +101,7 @@ int main(int argc, const char * argv[]) {
     
     
     char option = '\0';
-    string filePathIn,filePathOut,key;
+    string filePathIn,filePathOut,key,fileInContent;
     for (int x = 1; x<argc; x++) {
         switch (x) {
             case 1:
@@ -119,6 +120,7 @@ int main(int argc, const char * argv[]) {
     }
     
     key = vigenereKey(key);
+    fileInContent = fileRead(filePathIn);
     
     if (option == 'c') {
         
