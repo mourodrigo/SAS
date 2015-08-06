@@ -10,6 +10,7 @@
 #include <vector>
 #include <string>
 #include <fstream>
+#include <strstream>
 
 using namespace std;
 
@@ -82,8 +83,7 @@ string fileRead(string filePathIn){
         ccharacter = getc(in);
         character = ccharacter;
         cout << ccharacter << " - " << character <<  " - " << endl;
-        string scharacter(reinterpret_cast<char*>(ccharacter));
-        read.append(string(reinterpret_cast<char*>(ccharacter)));
+        read.append(string(1, (char)ccharacter));
     }
     return read;
 }
@@ -106,10 +106,10 @@ int main(int argc, const char * argv[]) {
     std::cout << "CriptVigenere\n\n";
 //    string key = vigenereKey("VIGENERECIPHER");
 //    string original = "Beware the Jabberwock, my son! The jaws that bite, the claws that catch!";
-    string encrypted = encrypt(original, key);
-    string decrypted = decrypt(encrypted, key);
-    
-    cout << encrypted;
+//    string encrypted = encrypt(original, key);
+//    string decrypted = decrypt(encrypted, key);
+//    
+//    cout << encrypted;
     
     
     
@@ -136,10 +136,10 @@ int main(int argc, const char * argv[]) {
     fileInContent = fileRead(filePathIn);
     
     if (option == 'c') {
-        
+        fileWrite(filePathOut, encrypt(fileInContent, key));
     }
     if (option == 'd') {
-        fileManage(filePathIn,filePathOut,0-offset);
+        fileWrite(filePathOut, decrypt(fileInContent, key));
     }
     std::cout << "CriptCesar!\n";
     
