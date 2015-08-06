@@ -38,6 +38,7 @@ int fileManage(string filePathIn,string filePathOut,unsigned int offset){
     
     vector<vector<unsigned int>> v;
     
+    
     int x=0;
     while(character!=255){
         if (x<offset) {
@@ -50,16 +51,18 @@ int fileManage(string filePathIn,string filePathOut,unsigned int offset){
         v.at(x%offset).push_back(ccharacter);
         x++;
     }
-
     for ( vector<vector<unsigned int>>::iterator vectors = v.begin(); vectors != v.end(); ++vectors )
     {
         for ( vector<unsigned int>::iterator ints = (*vectors).begin(); ints != (*vectors).end(); ++ ints )
         {
             
             std::cout << (*ints) << "\n"; // print the strings
-            out << (unsigned char)(*ints);
+            if (*ints != 255) {
+                out << (unsigned char)(*ints);
+            }
         }
     }
+
     
     out.close();
     cout << "File out done " << filePathOut << endl;
@@ -96,7 +99,20 @@ int main(int argc, const char * argv[]) {
         fileManage(filePathIn,filePathOut,offset);
     }
     if (option == 'd') {
-        fileManage(filePathIn,filePathOut,0-offset);
+        ifstream fileIn (filePathIn);
+        string line;
+        int count = 0;
+        
+        while( getline ( fileIn, line ) )
+        {
+            cout << line << endl;
+            count += line.length();
+        }
+        fileIn.close();
+        
+        cout << "tamanho" << count << endl;
+
+        fileManage(filePathIn,filePathOut,count/offset);
     }
     std::cout << "CriptCesar!\n";
     
