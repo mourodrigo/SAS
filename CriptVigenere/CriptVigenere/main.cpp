@@ -133,7 +133,7 @@ int main(int argc, const char * argv[]) {
     if (option == 'd') {
         fileWrite(filePathOut, decrypt(fileInContent, key));
     }
-    std::cout << "CriptCesar!\n";
+    std::cout << "CriptVigenere!\n";
     
     return 0;
 }
