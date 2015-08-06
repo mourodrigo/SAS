@@ -30,7 +30,7 @@ string vigenereKey(string key)
 string encrypt(string text, string key)
 {
     string out;
-    
+    cout << text;
     for(int i = 0, j = 0; i < text.length(); ++i)
     {
         char c = text[i];
@@ -85,6 +85,7 @@ string fileRead(string filePathIn){
         cout << ccharacter << " - " << character <<  " - " << endl;
         read.append(string(1, (char)ccharacter));
     }
+    cout << read;
     return read;
 }
 
@@ -93,7 +94,7 @@ bool fileWrite(string filePathOut, string content){
     out.open(filePathOut, ofstream::app);
     
     if (out.is_open()) {
-        cout << "File out open" << filePathOut << endl;
+        cout << "\n\nFile out open\n\n" << filePathOut << endl;
         out << content;
     }
     out.close();
@@ -102,16 +103,7 @@ bool fileWrite(string filePathOut, string content){
 
 
 int main(int argc, const char * argv[]) {
-    // insert code here...
     std::cout << "CriptVigenere\n\n";
-//    string key = vigenereKey("VIGENERECIPHER");
-//    string original = "Beware the Jabberwock, my son! The jaws that bite, the claws that catch!";
-//    string encrypted = encrypt(original, key);
-//    string decrypted = decrypt(encrypted, key);
-//    
-//    cout << encrypted;
-    
-    
     
     char option = '\0';
     string filePathIn,filePathOut,key,fileInContent;
@@ -143,7 +135,5 @@ int main(int argc, const char * argv[]) {
     }
     std::cout << "CriptCesar!\n";
     
-    
-
     return 0;
 }
