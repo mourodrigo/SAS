@@ -11,6 +11,10 @@
 #include <string>
 #include <fstream>
 
+#define NIL 0
+
+#define FORCEREAD
+
 using namespace std;
 
 int decryptCesar(vector<unsigned int> plainText, vector<unsigned int> darkText){
@@ -28,6 +32,39 @@ int decryptCesar(vector<unsigned int> plainText, vector<unsigned int> darkText){
         offset=offset*(-1);
     }
     return offset;
+}
+
+void printUnsigedIntVector(vector<unsigned int> vec){
+    cout << endl << "{";
+    for ( vector<unsigned int>::iterator ints = (vec).begin(); ints != (vec).end(); ++ ints )
+    {
+        if ((*ints)!=NIL) {
+            cout << (*ints);
+            if (*ints!=vec.at(vec.size()-1)) {
+                cout << " , ";
+            }
+        }else{
+            cout << " , ";
+        }
+    }
+    cout << "}";
+}
+
+vector<unsigned int> decryptSubstitute(vector<unsigned int> plainText, vector<unsigned int> darkText){
+    
+//    if (plainText.size()!=darkText.size()) {
+//        return vector<unsigned int> (0,0);
+//    }
+
+    vector<unsigned int> table (256,NIL);
+    for (int k=0; k<plainText.size(); k++) {
+        if (/*!table.at(plainText.at(k))*/table.at(plainText.at(k))==NIL) {
+            table[(int)plainText.at(k)] = darkText.at(k);
+        }
+    }
+    
+    return table;
+    
 }
 
 vector<unsigned int> fileRead(string filePathIn){
@@ -50,7 +87,13 @@ vector<unsigned int> fileRead(string filePathIn){
 //        read.append(string(1, (char)ccharacter));
         v.push_back(character);
     }
-    
+    fclose(in);
+
+#ifdef FORCEREAD
+    if (v.size()==0) {
+        return fileRead(filePathIn);
+    }
+#endif
     return v;
 }
 
@@ -80,12 +123,29 @@ int main(int argc, const char * argv[]) {
     
     vector<unsigned int> plainText = fileRead(plainTextPath);
     vector<unsigned int> darkText = fileRead(darkTextPath);
+
+    switch (type) {
+        case 1:
+            cout << endl << endl << "CRITOGRAFIA CESAR -- Chave identificada: " << decryptCesar(plainText, darkText) << endl;
+            break;
+
+        case 2:
+            cout << endl << endl << "CRITOGRAFIA SUBSTITUIÇÃO -- Mapa:: " << endl;
+            printUnsigedIntVector(decryptSubstitute(plainText, darkText));
+            break;
+
+    }
     
     switch (type) {
         case 1:
-            int offset = decryptCesar(plainText, darkText);
-            cout << endl << endl << "CRITOGRAFIA CESAR -- Chave identificada: " << offset << endl;
-            break;
+        
+        case 2:
+            
+        break;
+
+//        case 2:
+//        break;
+
     }
     
     return 0;
