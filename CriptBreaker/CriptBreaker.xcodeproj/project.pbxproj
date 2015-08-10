@@ -235,6 +235,7 @@
 				30C6E3A51B737FE40058E029 /* Release */,
 			);
 			defaultConfigurationIsVisible = 0;
+			defaultConfigurationName = Release;
 		};
 /* End XCConfigurationList section */
 	};

@@ -15,17 +15,52 @@
 
 #define FORCEREAD
 
-int printDebug = 0;
-
 using namespace std;
 
-int decryptCesar(vector<unsigned int> plainText, vector<unsigned int> darkText){
-    int offset=0;
+typedef unsigned int ui;
+typedef vector<ui> vui;
+
+int printDebug = 0;
+
+vui decryptVigenere(vui offsetVector){
+    vui result;
+    int index = 0;
+    ui last=offsetVector.at(0);
+    for (int t=1; t< offsetVector.size();t++){
+        if (offsetVector.at(t)==last) {
+            cout << "repete - " << index << last << endl;
+            index = t;
+        }
+    }
+    cout << endl << endl;
+    for (int s = 0; s<=index; s++) {
+        cout << offsetVector.at(s);
+    }
+    
+    return result;
+}
+
+vui getOffsetOfFiles(vui plainText, vui darkText){
+    vui table (256,NIL);
     for (int h=0; h<darkText.size()||h<plainText.size(); h++) {
+        table[h] = plainText.at(0)-darkText.at(0);
+    }
+    return table;
+}
+
+int decryptCesar(vui plainText, vui darkText){
+    int offset=0,assert=0;
+    for (int h=0; h<darkText.size()||h<plainText.size()||1; h++) {
         if (h==0) {
-            offset=plainText.at(0)-darkText.at(0);
-        }else if (offset==plainText.at(0)-darkText.at(0) && h>100) {
-                break;
+            offset=(int)plainText.at(h)-(int)darkText.at(h);
+        }else if (offset==(int)plainText.at(h)-(int)darkText.at(h)) {
+            assert++;
+        }else if (offset!=(int)plainText.at(h)-(int)darkText.at(h)){
+            cout << "WARNING: Provavelmente não é cifra de Cesar." << endl;
+            break;
+        }
+        if (assert>100) {
+            break;
         }
     }
     if (offset<0) {
@@ -34,9 +69,9 @@ int decryptCesar(vector<unsigned int> plainText, vector<unsigned int> darkText){
     return offset;
 }
 
-void printUnsigedIntVector(vector<unsigned int> vec){
+void printUnsigedIntVector(vui vec){
     cout << endl << "{";
-    for ( vector<unsigned int>::iterator ints = (vec).begin(); ints != (vec).end(); ++ ints )
+    for ( vui::iterator ints = (vec).begin(); ints != (vec).end(); ++ ints )
     {
         if ((*ints)!=NIL) {
             cout << (*ints);
@@ -50,9 +85,9 @@ void printUnsigedIntVector(vector<unsigned int> vec){
     cout << "}";
 }
 
-vector<unsigned int> decryptSubstitute(vector<unsigned int> plainText, vector<unsigned int> darkText){
+vui decryptSubstitute(vui plainText, vui darkText){
     
-    vector<unsigned int> table (256,NIL);
+    vui table (256,NIL);
     for (int k=0; k<plainText.size(); k++) {
         if (table.at(plainText.at(k))==NIL) {
             table[(int)plainText.at(k)] = darkText.at(k);
@@ -66,7 +101,7 @@ vector<unsigned int> decryptSubstitute(vector<unsigned int> plainText, vector<un
     
 }
 
-vector<unsigned int> fileRead(string filePathIn){
+vui fileRead(string filePathIn){
     FILE *in;
     
     in = fopen(filePathIn.c_str(), "rb");
@@ -74,11 +109,11 @@ vector<unsigned int> fileRead(string filePathIn){
         cout << "Erro: Arquivo de entrada nao encontrado " << filePathIn << endl;
     }
     
-    unsigned int character;
+    ui character;
     unsigned char ccharacter;
 //    string read;
     
-    vector<unsigned int> v;
+    vui v;
     while(character!=255){
         ccharacter = getc(in);
         character = ccharacter;
@@ -104,7 +139,7 @@ int main(int argc, const char * argv[]) {
     
     char option = '\0';
     string plainTextPath, darkTextPath;
-    unsigned int type = 0;
+    ui type = 0;
     for (int x = 1; x<argc; x++) {
         switch (x) {
             case 1:
@@ -121,8 +156,10 @@ int main(int argc, const char * argv[]) {
         }
     }
     
-    vector<unsigned int> plainText = fileRead(plainTextPath);
-    vector<unsigned int> darkText = fileRead(darkTextPath);
+    vui plainText = fileRead(plainTextPath);
+    vui darkText = fileRead(darkTextPath);
+    vui result;
+    
 
     switch (type) {
         case 1:
@@ -134,7 +171,11 @@ int main(int argc, const char * argv[]) {
             printUnsigedIntVector(decryptSubstitute(plainText, darkText));
             break;
 
+        case 3:
+            decryptVigenere(getOffsetOfFiles(plainText, darkText));
+            break;
     }
+    
     
     
     return 0;
