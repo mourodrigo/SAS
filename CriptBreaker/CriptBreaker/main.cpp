@@ -15,6 +15,8 @@
 
 #define FORCEREAD
 
+int printDebug = 0;
+
 using namespace std;
 
 int decryptCesar(vector<unsigned int> plainText, vector<unsigned int> darkText){
@@ -22,10 +24,8 @@ int decryptCesar(vector<unsigned int> plainText, vector<unsigned int> darkText){
     for (int h=0; h<darkText.size()||h<plainText.size(); h++) {
         if (h==0) {
             offset=plainText.at(0)-darkText.at(0);
-        }else{
-            if (offset==plainText.at(0)-darkText.at(0) && h>10) {
+        }else if (offset==plainText.at(0)-darkText.at(0) && h>100) {
                 break;
-            }
         }
     }
     if (offset<0) {
@@ -52,14 +52,13 @@ void printUnsigedIntVector(vector<unsigned int> vec){
 
 vector<unsigned int> decryptSubstitute(vector<unsigned int> plainText, vector<unsigned int> darkText){
     
-//    if (plainText.size()!=darkText.size()) {
-//        return vector<unsigned int> (0,0);
-//    }
-
     vector<unsigned int> table (256,NIL);
     for (int k=0; k<plainText.size(); k++) {
-        if (/*!table.at(plainText.at(k))*/table.at(plainText.at(k))==NIL) {
+        if (table.at(plainText.at(k))==NIL) {
             table[(int)plainText.at(k)] = darkText.at(k);
+        }else{
+            cout << "WARNING: Provavelmente não é cifra de substitução." << endl;
+            break;
         }
     }
     
@@ -83,8 +82,9 @@ vector<unsigned int> fileRead(string filePathIn){
     while(character!=255){
         ccharacter = getc(in);
         character = ccharacter;
-        cout << ccharacter << " - " << character <<  " - " << endl;
-//        read.append(string(1, (char)ccharacter));
+        if (printDebug) {
+            cout << ccharacter << " - " << character <<  " - " << endl;
+        }
         v.push_back(character);
     }
     fclose(in);
@@ -136,17 +136,6 @@ int main(int argc, const char * argv[]) {
 
     }
     
-    switch (type) {
-        case 1:
-        
-        case 2:
-            
-        break;
-
-//        case 2:
-//        break;
-
-    }
     
     return 0;
 }
