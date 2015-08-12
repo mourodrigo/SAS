@@ -22,6 +22,8 @@ typedef vector<ui> vui;
 
 int printDebug = 0;
 
+
+
 vui decryptVigenere(vui offsetVector){
     vui result;
     int index = 0;
@@ -43,7 +45,7 @@ vui decryptVigenere(vui offsetVector){
 vui getOffsetOfFiles(vui plainText, vui darkText){
     vui table (256,NIL);
     for (int h=0; h<darkText.size()||h<plainText.size(); h++) {
-        table[h] = plainText.at(0)-darkText.at(0);
+        table[h] = plainText.at(h)-darkText.at(h);
     }
     return table;
 }
@@ -89,11 +91,14 @@ vui decryptSubstitute(vui plainText, vui darkText){
     
     vui table (256,NIL);
     for (int k=0; k<plainText.size(); k++) {
-        if (table.at(plainText.at(k))==NIL) {
+        if (table[(int)plainText.at(k)]==NIL) {
             table[(int)plainText.at(k)] = darkText.at(k);
-        }else{
+            
+        }else if(table[(int)plainText.at(k)]!=darkText.at(k)){
+            cout << "table.at(plainText.at("<<k<<")) == " << table.at(plainText.at(k)) << endl;
+            cout << "atribuindo " << darkText.at(k) << endl;
             cout << "WARNING: Provavelmente não é cifra de substitução." << endl;
-            break;
+//            break;
         }
     }
     

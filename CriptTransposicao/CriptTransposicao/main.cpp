@@ -13,8 +13,72 @@
 
 using namespace std;
 
+typedef unsigned int ui;
+typedef vector<ui> vui;
+
+int printDebug = 0;
+
 unsigned int transposeEncrypt(int in, unsigned int offset){
     return in+(offset%255);
+}
+
+void outputTransposed(vector<vui> v, string output){
+    bool writeToFile = strcmp(output.c_str(), "v") ? 1 : 0;
+    ofstream out;
+    
+    if (writeToFile)
+        out.open(output, ofstream::app);
+    
+    for ( vector<vui>::iterator vectors = v.begin(); vectors != v.end(); ++vectors )
+    {
+        for ( vui::iterator ints = (*vectors).begin(); ints != (*vectors).end(); ++ ints )
+        {
+            if ((*ints)!=255){
+                if (writeToFile) {
+                        out << (unsigned char)(*ints);
+                }else if (!writeToFile || printDebug){
+                    cout << (unsigned char)(*ints);
+                }
+            }
+        }
+    }
+    
+    if (writeToFile)
+        out.close();
+    
+    if (printDebug)
+        cout << "File out done " << output << endl;
+}
+
+
+vector<vui> transposeFileReading(string filePathIn,unsigned int offset){
+    vector<vui> v;
+
+    FILE *in;
+    
+    in = fopen(filePathIn.c_str(), "rb");
+    if(!in) {
+        cout << "Erro: Arquivo de entrada nao encontrado " << filePathIn << endl;
+    }
+    
+    unsigned int character;
+    unsigned char ccharacter = '\0';
+    
+    int x=0;
+    while(character!=255){
+        if (x<offset) {
+            vui column;
+            v.push_back(column);
+        }
+        ccharacter = getc(in);
+        character = ccharacter;
+        if (printDebug) {
+            cout << ccharacter << " - " << character << endl;
+        }
+        v.at(x%offset).push_back(ccharacter);
+        x++;
+    }
+    return v;
 }
 
 int fileManage(string filePathIn,string filePathOut,unsigned int offset){
@@ -32,31 +96,33 @@ int fileManage(string filePathIn,string filePathOut,unsigned int offset){
     unsigned int character;
     unsigned char ccharacter = '\0';
     
-    if (out.is_open()) {
+    if (out.is_open() && printDebug) {
         cout << "File in open" << filePathIn << endl;
     }
     
-    vector<vector<unsigned int>> v;
-    
+    vector<vui> v;
     
     int x=0;
     while(character!=255){
         if (x<offset) {
-            vector<unsigned int> column;
+            vui column;
             v.push_back(column);
         }
         ccharacter = getc(in);
         character = ccharacter;
-        cout << ccharacter << " - " << character << endl;
+        if (printDebug) {
+            cout << ccharacter << " - " << character << endl;
+        }
         v.at(x%offset).push_back(ccharacter);
         x++;
     }
-    for ( vector<vector<unsigned int>>::iterator vectors = v.begin(); vectors != v.end(); ++vectors )
+    for ( vector<vui>::iterator vectors = v.begin(); vectors != v.end(); ++vectors )
     {
-        for ( vector<unsigned int>::iterator ints = (*vectors).begin(); ints != (*vectors).end(); ++ ints )
+        for ( vui::iterator ints = (*vectors).begin(); ints != (*vectors).end(); ++ ints )
         {
-            
-            std::cout << (*ints) << "\n"; // print the strings
+            if (printDebug) {
+                std::cout << (*ints) << "\n"; // print the strings
+            }
             if (*ints != 255) {
                 out << (unsigned char)(*ints);
             }
@@ -65,18 +131,22 @@ int fileManage(string filePathIn,string filePathOut,unsigned int offset){
 
     
     out.close();
-    cout << "File out done " << filePathOut << endl;
 
+    if (printDebug) {
+        cout << "File out done " << filePathOut << endl;
+    }
+    
     return true;
 }
 
 int main(int argc, const char * argv[]) {
     // insert code here...
-    std::cout << "CriptTransposicao!\n";
-    
+    if (printDebug) {
+        std::cout << "CriptTransposicao!\n";
+    }
     
     char option = '\0';
-    string filePathIn,filePathOut;
+    string filePathIn,output;
     unsigned int offset = 0;
     for (int x = 1; x<argc; x++) {
         switch (x) {
@@ -87,7 +157,7 @@ int main(int argc, const char * argv[]) {
                 filePathIn = string(argv[2]);
                 break;
             case 3:
-                filePathOut = string(argv[3]);
+                output = string(argv[3]);
                 break;
             case 4:
                 offset = atoi(argv[x]);
@@ -96,7 +166,8 @@ int main(int argc, const char * argv[]) {
     }
     
     if (option == 'c') {
-        fileManage(filePathIn,filePathOut,offset);
+        outputTransposed(transposeFileReading(filePathIn, offset), output);
+//        fileManage(filePathIn,filePathOut,offset);
     }
     if (option == 'd') {
         ifstream fileIn (filePathIn);
@@ -105,18 +176,18 @@ int main(int argc, const char * argv[]) {
         
         while( getline ( fileIn, line ) )
         {
-            cout << line << endl;
+//            cout << line << endl;
             count += line.length();
         }
         fileIn.close();
         
-        cout << "tamanho" << count << endl;
+        if (printDebug) {
+            cout << "tamanho" << count << endl;
+        }
+        outputTransposed(transposeFileReading(filePathIn, count/offset), output);
 
-        fileManage(filePathIn,filePathOut,count/offset);
+//        fileManage(filePathIn,filePathOut,count/offset);
     }
-    std::cout << "CriptCesar!\n";
-    
-    
     
     return 0;
 }
