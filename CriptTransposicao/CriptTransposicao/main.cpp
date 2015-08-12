@@ -167,7 +167,6 @@ int main(int argc, const char * argv[]) {
     
     if (option == 'c') {
         outputTransposed(transposeFileReading(filePathIn, offset), output);
-//        fileManage(filePathIn,filePathOut,offset);
     }
     if (option == 'd') {
         ifstream fileIn (filePathIn);
@@ -176,7 +175,6 @@ int main(int argc, const char * argv[]) {
         
         while( getline ( fileIn, line ) )
         {
-//            cout << line << endl;
             count += line.length();
         }
         fileIn.close();
@@ -185,8 +183,6 @@ int main(int argc, const char * argv[]) {
             cout << "tamanho" << count << endl;
         }
         outputTransposed(transposeFileReading(filePathIn, count/offset), output);
-
-//        fileManage(filePathIn,filePathOut,count/offset);
     }
     
     return 0;
