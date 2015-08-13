@@ -44,8 +44,8 @@ vui decryptVigenere(vui offsetVector){
 
 vui getOffsetOfFiles(vui plainText, vui darkText){
     vui table (256,NIL);
-    for (int h=0; h<darkText.size()||h<plainText.size(); h++) {
-        table[h] = plainText.at(h)-darkText.at(h);
+    for (int h=0; h<darkText.size()&&h<plainText.size(); h++) {
+        table[h] = (unsigned int)((darkText.at(h)-plainText.at(h))%255);
     }
     return table;
 }
@@ -85,6 +85,22 @@ void printUnsigedIntVector(vui vec){
         }
     }
     cout << "}";
+}
+
+void printCharVector(vui vec){
+//    cout << endl << "{";
+    for ( vui::iterator ints = (vec).begin(); ints != (vec).end(); ++ ints )
+    {
+        if ((*ints)!=NIL) {
+            cout << (char)(*ints);
+//            if (*ints!=vec.at(vec.size()-1)) {
+//                cout << " , ";
+//            }
+        }else{
+//            cout << " , ";
+        }
+    }
+//    cout << "}";
 }
 
 vui decryptSubstitute(vui plainText, vui darkText){
@@ -177,7 +193,8 @@ int main(int argc, const char * argv[]) {
             break;
 
         case 3:
-            decryptVigenere(getOffsetOfFiles(plainText, darkText));
+//            decryptVigenere(getOffsetOfFiles(plainText, darkText));
+            printCharVector(getOffsetOfFiles(plainText, darkText));
             break;
     }
     
