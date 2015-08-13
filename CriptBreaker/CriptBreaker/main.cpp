@@ -22,13 +22,31 @@ typedef vector<ui> vui;
 
 int printDebug = 0;
 
+std::string exec(string cmd) {
+    
+    FILE* pipe = popen((char*)cmd.c_str(), "r");
+    if (!pipe) return "ERROR";
+    char buffer[128];
+    std::string result = "";
+    while(!feof(pipe)) {
+        if(fgets(buffer, 128, pipe) != NULL)
+            result += buffer;
+    }
+    pclose(pipe);
+    return result;
+}
 
-
+//=======================================
+#pragma mark - Vigenere
+//=======================================
 vui decryptVigenere(vui offsetVector){
     vui result;
     int index = 0;
     ui last=offsetVector.at(0);
+    result.push_back(offsetVector.at(0));
+
     for (int t=1; t< offsetVector.size();t++){
+        result.push_back(offsetVector.at(t));
         if (offsetVector.at(t)==last) {
             cout << "repete - " << index << last << endl;
             index = t;
@@ -43,13 +61,16 @@ vui decryptVigenere(vui offsetVector){
 }
 
 vui getOffsetOfFiles(vui plainText, vui darkText){
-    vui table (256,NIL);
+    vui table;// (256,NIL);
     for (int h=0; h<darkText.size()&&h<plainText.size(); h++) {
-        table[h] = (unsigned int)((darkText.at(h)-plainText.at(h))%255);
+        table.push_back((unsigned int)((darkText.at(h)-plainText.at(h))%255));
     }
     return table;
 }
 
+//=======================================
+#pragma mark - Cesar
+//=======================================
 int decryptCesar(vui plainText, vui darkText){
     int offset=0,assert=0;
     for (int h=0; h<darkText.size()||h<plainText.size()||1; h++) {
@@ -70,6 +91,7 @@ int decryptCesar(vui plainText, vui darkText){
     }
     return offset;
 }
+
 
 void printUnsigedIntVector(vui vec){
     cout << endl << "{";
@@ -103,6 +125,10 @@ void printCharVector(vui vec){
 //    cout << "}";
 }
 
+
+//=======================================
+#pragma mark - Substitute
+//=======================================
 vui decryptSubstitute(vui plainText, vui darkText){
     
     vui table (256,NIL);
@@ -120,6 +146,18 @@ vui decryptSubstitute(vui plainText, vui darkText){
     
     return table;
     
+}
+
+//=======================================
+#pragma mark - Transpose
+//=======================================
+
+void decryptTranspose(vui plainText, vui darkText, string outFilePath){
+    string execStr = "cd /Users/mourodrigo/Developer/SAS/CriptBreaker/CriptBreaker;./CriptTransposicao d " + outFilePath + " v 3";
+    string execReturn = exec(execStr);
+    cout << execStr << endl;
+    cout << execReturn << endl;
+
 }
 
 vui fileRead(string filePathIn){
@@ -196,6 +234,10 @@ int main(int argc, const char * argv[]) {
 //            decryptVigenere(getOffsetOfFiles(plainText, darkText));
             printCharVector(getOffsetOfFiles(plainText, darkText));
             break;
+        case 4:
+            decryptTranspose(plainText, darkText, darkTextPath);
+            break;
+            
     }
     
     

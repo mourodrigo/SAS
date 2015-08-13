@@ -141,6 +141,7 @@ int fileManage(string filePathIn,string filePathOut,unsigned int offset){
 
 int main(int argc, const char * argv[]) {
     // insert code here...
+    cout << argv[0];
     if (printDebug) {
         std::cout << "CriptTransposicao!\n";
     }
