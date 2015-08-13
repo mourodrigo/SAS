@@ -22,46 +22,33 @@ typedef vector<ui> vui;
 
 int printDebug = 0;
 
-std::string exec(string cmd) {
-    
-    FILE* pipe = popen((char*)cmd.c_str(), "r");
-    if (!pipe) return "ERROR";
-    char buffer[128];
-    std::string result = "";
-    while(!feof(pipe)) {
-        if(fgets(buffer, 128, pipe) != NULL)
-            result += buffer;
-    }
-    pclose(pipe);
-    return result;
-}
 
 //=======================================
 #pragma mark - Vigenere
 //=======================================
 vui decryptVigenere(vui offsetVector){
     vui result;
-    int index = 0;
-    ui last=offsetVector.at(0);
-    result.push_back(offsetVector.at(0));
 
-    for (int t=1; t< offsetVector.size();t++){
-        result.push_back(offsetVector.at(t));
-        if (offsetVector.at(t)==last) {
-            cout << "repete - " << index << last << endl;
-            index = t;
+    for (int t=0; t< offsetVector.size();t++){
+        vui::iterator it = find(result.begin(), result.end(), offsetVector.at(t));
+
+        if (it==result.end()) {
+            result.push_back(offsetVector.at(t));
+        }else{
+            break;
         }
+        
     }
-    cout << endl << endl;
-    for (int s = 0; s<=index; s++) {
-        cout << offsetVector.at(s);
+    
+    for (int s = 0; s<result.size(); s++) {
+        cout << (char)result.at(s);
     }
     
     return result;
 }
 
 vui getOffsetOfFiles(vui plainText, vui darkText){
-    vui table;// (256,NIL);
+    vui table;
     for (int h=0; h<darkText.size()&&h<plainText.size(); h++) {
         table.push_back((unsigned int)((darkText.at(h)-plainText.at(h))%255));
     }
@@ -92,43 +79,10 @@ int decryptCesar(vui plainText, vui darkText){
     return offset;
 }
 
-
-void printUnsigedIntVector(vui vec){
-    cout << endl << "{";
-    for ( vui::iterator ints = (vec).begin(); ints != (vec).end(); ++ ints )
-    {
-        if ((*ints)!=NIL) {
-            cout << (*ints);
-            if (*ints!=vec.at(vec.size()-1)) {
-                cout << " , ";
-            }
-        }else{
-            cout << " , ";
-        }
-    }
-    cout << "}";
-}
-
-void printCharVector(vui vec){
-//    cout << endl << "{";
-    for ( vui::iterator ints = (vec).begin(); ints != (vec).end(); ++ ints )
-    {
-        if ((*ints)!=NIL) {
-            cout << (char)(*ints);
-//            if (*ints!=vec.at(vec.size()-1)) {
-//                cout << " , ";
-//            }
-        }else{
-//            cout << " , ";
-        }
-    }
-//    cout << "}";
-}
-
-
 //=======================================
 #pragma mark - Substitute
 //=======================================
+
 vui decryptSubstitute(vui plainText, vui darkText){
     
     vui table (256,NIL);
@@ -140,7 +94,6 @@ vui decryptSubstitute(vui plainText, vui darkText){
             cout << "table.at(plainText.at("<<k<<")) == " << table.at(plainText.at(k)) << endl;
             cout << "atribuindo " << darkText.at(k) << endl;
             cout << "WARNING: Provavelmente não é cifra de substitução." << endl;
-//            break;
         }
     }
     
@@ -152,6 +105,20 @@ vui decryptSubstitute(vui plainText, vui darkText){
 #pragma mark - Transpose
 //=======================================
 
+std::string exec(string cmd) {
+    
+    FILE* pipe = popen((char*)cmd.c_str(), "r");
+    if (!pipe) return "ERROR";
+    char buffer[128];
+    std::string result = "";
+    while(!feof(pipe)) {
+        if(fgets(buffer, 128, pipe) != NULL)
+            result += buffer;
+    }
+    pclose(pipe);
+    return result;
+}
+
 void decryptTranspose(vui plainText, vui darkText, string outFilePath){
     string execStr = "cd /Users/mourodrigo/Developer/SAS/CriptBreaker/CriptBreaker;./CriptTransposicao d " + outFilePath + " v 3";
     string execReturn = exec(execStr);
@@ -159,6 +126,12 @@ void decryptTranspose(vui plainText, vui darkText, string outFilePath){
     cout << execReturn << endl;
 
 }
+
+
+//=======================================
+#pragma mark - File Reading
+//=======================================
+
 
 vui fileRead(string filePathIn){
     FILE *in;
@@ -170,7 +143,6 @@ vui fileRead(string filePathIn){
     
     ui character;
     unsigned char ccharacter;
-//    string read;
     
     vui v;
     while(character!=255){
@@ -189,6 +161,35 @@ vui fileRead(string filePathIn){
     }
 #endif
     return v;
+}
+
+//=======================================
+#pragma mark - Std out
+//=======================================
+
+
+void printUnsigedIntVector(vui vec){
+    cout << endl << "{";
+    for ( vui::iterator ints = (vec).begin(); ints != (vec).end(); ++ ints )
+    {
+        if ((*ints)!=NIL) {
+            cout << (*ints);
+            if (*ints!=vec.at(vec.size()-1)) {
+                cout << " , ";
+            }
+        }else{
+            cout << " , ";
+        }
+    }
+    cout << "}";
+}
+
+void printCharVector(vui vec){
+    for ( vui::iterator ints = (vec).begin(); ints != (vec).end(); ++ ints )
+    {
+        if ((*ints)!=NIL)
+            cout << (char)(*ints);
+    }
 }
 
 
@@ -226,13 +227,14 @@ int main(int argc, const char * argv[]) {
             break;
 
         case 2:
-            cout << endl << endl << "CRITOGRAFIA SUBSTITUIÇÃO -- Mapa:: " << endl;
+            cout << endl << endl << "CRITOGRAFIA SUBSTITUIÇÃO -- Mapa: " << endl;
             printUnsigedIntVector(decryptSubstitute(plainText, darkText));
             break;
 
         case 3:
-//            decryptVigenere(getOffsetOfFiles(plainText, darkText));
-            printCharVector(getOffsetOfFiles(plainText, darkText));
+            cout << endl << endl << "CRITOGRAFIA Vigenere -- Chave: " << endl;
+            decryptVigenere(getOffsetOfFiles(plainText, darkText));
+            
             break;
         case 4:
             decryptTranspose(plainText, darkText, darkTextPath);
