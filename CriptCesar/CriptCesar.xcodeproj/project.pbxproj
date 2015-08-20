@@ -7,7 +7,7 @@
 	objects = {
 
 /* Begin PBXBuildFile section */
-		30A005871B690E80009428BD /* main.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 30A005861B690E80009428BD /* main.cpp */; };
+		30A005871B690E80009428BD /* cesar.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 30A005861B690E80009428BD /* cesar.cpp */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXCopyFilesBuildPhase section */
@@ -24,7 +24,7 @@
 
 /* Begin PBXFileReference section */
 		30A005831B690E80009428BD /* CriptCesar */ = {isa = PBXFileReference; explicitFileType = "compiled.mach-o.executable"; includeInIndex = 0; path = CriptCesar; sourceTree = BUILT_PRODUCTS_DIR; };
-		30A005861B690E80009428BD /* main.cpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; path = main.cpp; sourceTree = "<group>"; };
+		30A005861B690E80009428BD /* cesar.cpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; path = cesar.cpp; sourceTree = "<group>"; };
 		30A0058D1B6912B5009428BD /* examplefile1.txt */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text; path = examplefile1.txt; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
@@ -58,7 +58,7 @@
 		30A005851B690E80009428BD /* CriptCesar */ = {
 			isa = PBXGroup;
 			children = (
-				30A005861B690E80009428BD /* main.cpp */,
+				30A005861B690E80009428BD /* cesar.cpp */,
 				30A0058D1B6912B5009428BD /* examplefile1.txt */,
 			);
 			path = CriptCesar;
@@ -120,7 +120,7 @@
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
-				30A005871B690E80009428BD /* main.cpp in Sources */,
+				30A005871B690E80009428BD /* cesar.cpp in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -237,6 +237,7 @@
 				30A0058C1B690E80009428BD /* Release */,
 			);
 			defaultConfigurationIsVisible = 0;
+			defaultConfigurationName = Release;
 		};
 /* End XCConfigurationList section */
 	};

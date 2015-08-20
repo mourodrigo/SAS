@@ -20,7 +20,51 @@ using namespace std;
 typedef unsigned int ui;
 typedef vector<ui> vui;
 
-int printDebug = 0;
+int printDebug = 1;
+
+
+
+//=======================================
+#pragma mark - Std out
+//=======================================
+
+
+void printUnsigedIntVector(vui vec){
+    cout << endl << "{";
+    for ( vui::iterator ints = (vec).begin(); ints != (vec).end(); ++ ints )
+    {
+        if ((*ints)!=NIL) {
+            cout << (*ints);
+            if (*ints!=vec.at(vec.size()-1)) {
+                cout << " , ";
+            }
+        }else{
+            cout << " , ";
+        }
+    }
+    cout << "}";
+}
+
+void printCharVector(vui vec){
+    for ( vui::iterator ints = (vec).begin(); ints != (vec).end(); ++ ints )
+    {
+        if ((*ints)!=NIL)
+            cout << (char)(*ints);
+    }
+}
+
+string stringOfCharCector(vui vec){
+    string str;
+    for ( vui::iterator ints = (vec).begin(); ints != (vec).end(); ++ ints )
+    {
+        if ((*ints)!=NIL) {
+            if (*ints!=vec.at(vec.size()-1)) {
+            str = str + (char)(*ints);
+          }
+        }
+    }
+    return str;
+}
 
 
 //=======================================
@@ -50,7 +94,7 @@ vui decryptVigenere(vui offsetVector){
 vui getOffsetOfFiles(vui plainText, vui darkText){
     vui table;
     for (int h=0; h<darkText.size()&&h<plainText.size(); h++) {
-        table.push_back((unsigned int)((darkText.at(h)-plainText.at(h))%255));
+        table.push_back((unsigned int)((darkText.at(h)-plainText.at(h))%256));
     }
     return table;
 }
@@ -65,7 +109,7 @@ int decryptCesar(vui plainText, vui darkText){
             offset=(int)plainText.at(h)-(int)darkText.at(h);
         }else if (offset==(int)plainText.at(h)-(int)darkText.at(h)) {
             assert++;
-        }else if (offset!=(int)plainText.at(h)-(int)darkText.at(h)){
+        }else if (offset!=(int)plainText.at(h)-(int)darkText.at(h)){ //rever
             cout << "WARNING: Provavelmente não é cifra de Cesar." << endl;
             break;
         }
@@ -120,13 +164,25 @@ std::string exec(string cmd) {
 }
 
 void decryptTranspose(vui plainText, vui darkText, string outFilePath){
-    string execStr = "cd /Users/mourodrigo/Developer/SAS/CriptBreaker/CriptBreaker;./CriptTransposicao d " + outFilePath + " v 3";
-    string execReturn = exec(execStr);
-    cout << execStr << endl;
-    cout << execReturn << endl;
-
+    string execFile = "./CriptTransposicao";
+    int bruteForceIndex = 1;
+    string plainTextString = stringOfCharCector(plainText);
+    while (true) {
+        string execStr = "cd /Users/mourodrigo/Developer/SAS/CriptBreaker/CriptBreaker;"+execFile+" d " + outFilePath + " v "+to_string(++bruteForceIndex);
+        string execReturn = exec(execStr);
+        execReturn.replace(execReturn.begin(),execReturn.begin()+execFile.length(),"");
+        if (strcmp(execReturn.c_str(), plainTextString.c_str())==0)
+            break;
+        if (printDebug) {
+            cout << execStr << endl;
+            cout << execReturn << " tamanho " << execReturn.length() <<endl;
+//            cout << plainTextString  << " tamanho " << plainTextString.length() << endl<<endl;
+        }
+    }
+    
+    cout <<  "CHAVE DE TRANSPOSIÇÃO " << bruteForceIndex;
+    
 }
-
 
 //=======================================
 #pragma mark - File Reading
@@ -138,7 +194,7 @@ vui fileRead(string filePathIn){
     
     in = fopen(filePathIn.c_str(), "rb");
     if(!in) {
-        cout << "Erro: Arquivo de entrada nao encontrado " << filePathIn << endl;
+        cout << "Erro: Arquivo nao encontrado " << filePathIn << endl;
     }
     
     ui character;
@@ -161,35 +217,6 @@ vui fileRead(string filePathIn){
     }
 #endif
     return v;
-}
-
-//=======================================
-#pragma mark - Std out
-//=======================================
-
-
-void printUnsigedIntVector(vui vec){
-    cout << endl << "{";
-    for ( vui::iterator ints = (vec).begin(); ints != (vec).end(); ++ ints )
-    {
-        if ((*ints)!=NIL) {
-            cout << (*ints);
-            if (*ints!=vec.at(vec.size()-1)) {
-                cout << " , ";
-            }
-        }else{
-            cout << " , ";
-        }
-    }
-    cout << "}";
-}
-
-void printCharVector(vui vec){
-    for ( vui::iterator ints = (vec).begin(); ints != (vec).end(); ++ ints )
-    {
-        if ((*ints)!=NIL)
-            cout << (char)(*ints);
-    }
 }
 
 

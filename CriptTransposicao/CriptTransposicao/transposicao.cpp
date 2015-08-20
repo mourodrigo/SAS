@@ -16,7 +16,7 @@ using namespace std;
 typedef unsigned int ui;
 typedef vector<ui> vui;
 
-int printDebug = 0;
+int printDebug = 1;
 
 unsigned int transposeEncrypt(int in, unsigned int offset){
     return in+(offset%255);

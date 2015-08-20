@@ -7,7 +7,7 @@
 	objects = {
 
 /* Begin PBXBuildFile section */
-		30A0059B1B698A76009428BD /* main.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 30A0059A1B698A76009428BD /* main.cpp */; };
+		30A0059B1B698A76009428BD /* transposicao.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 30A0059A1B698A76009428BD /* transposicao.cpp */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXCopyFilesBuildPhase section */
@@ -24,7 +24,7 @@
 
 /* Begin PBXFileReference section */
 		30A005971B698A76009428BD /* CriptTransposicao */ = {isa = PBXFileReference; explicitFileType = "compiled.mach-o.executable"; includeInIndex = 0; path = CriptTransposicao; sourceTree = BUILT_PRODUCTS_DIR; };
-		30A0059A1B698A76009428BD /* main.cpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; path = main.cpp; sourceTree = "<group>"; };
+		30A0059A1B698A76009428BD /* transposicao.cpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; path = transposicao.cpp; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -57,7 +57,7 @@
 		30A005991B698A76009428BD /* CriptTransposicao */ = {
 			isa = PBXGroup;
 			children = (
-				30A0059A1B698A76009428BD /* main.cpp */,
+				30A0059A1B698A76009428BD /* transposicao.cpp */,
 			);
 			path = CriptTransposicao;
 			sourceTree = "<group>";
@@ -118,7 +118,7 @@
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
-				30A0059B1B698A76009428BD /* main.cpp in Sources */,
+				30A0059B1B698A76009428BD /* transposicao.cpp in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -235,6 +235,7 @@
 				30A005A01B698A76009428BD /* Release */,
 			);
 			defaultConfigurationIsVisible = 0;
+			defaultConfigurationName = Release;
 		};
 /* End XCConfigurationList section */
 	};
