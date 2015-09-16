@@ -7,7 +7,13 @@
 	objects = {
 
 /* Begin PBXBuildFile section */
-		30C6E3A01B737FE40058E029 /* main.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 30C6E39F1B737FE40058E029 /* main.cpp */; };
+		30488EF71B9FDD0A0090DF0A /* CriptTools.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 30488EF61B9FDD0A0090DF0A /* CriptTools.cpp */; };
+		30A7445D1B85F66600CB3EB2 /* idiomAnalyzer.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 30A7445C1B85F66600CB3EB2 /* idiomAnalyzer.cpp */; };
+		30BC56951B9FE72000F64AE2 /* CriptCesar.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 30BC56931B9FE72000F64AE2 /* CriptCesar.cpp */; };
+		30BC56981B9FE95C00F64AE2 /* CriptVigenere.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 30BC56961B9FE95C00F64AE2 /* CriptVigenere.cpp */; };
+		30BC569B1B9FEB4400F64AE2 /* CriptSubstitution.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 30BC56991B9FEB4400F64AE2 /* CriptSubstitution.cpp */; };
+		30BC569E1B9FEE1800F64AE2 /* CriptTranspose.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 30BC569C1B9FEE1800F64AE2 /* CriptTranspose.cpp */; };
+		30C6E3A01B737FE40058E029 /* CriptAnalyzer.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 30C6E39F1B737FE40058E029 /* CriptAnalyzer.cpp */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXCopyFilesBuildPhase section */
@@ -23,8 +29,21 @@
 /* End PBXCopyFilesBuildPhase section */
 
 /* Begin PBXFileReference section */
+		30488EF61B9FDD0A0090DF0A /* CriptTools.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = CriptTools.cpp; sourceTree = "<group>"; };
+		30488EF81B9FDF1F0090DF0A /* CripTools.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = CripTools.h; sourceTree = "<group>"; };
+		30488EF91B9FE06E0090DF0A /* CriptAnalyzer.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = CriptAnalyzer.h; sourceTree = "<group>"; };
+		30A7445C1B85F66600CB3EB2 /* idiomAnalyzer.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = idiomAnalyzer.cpp; sourceTree = "<group>"; };
+		30BC56931B9FE72000F64AE2 /* CriptCesar.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = CriptCesar.cpp; sourceTree = "<group>"; };
+		30BC56941B9FE72000F64AE2 /* CriptCesar.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = CriptCesar.h; sourceTree = "<group>"; };
+		30BC56961B9FE95C00F64AE2 /* CriptVigenere.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = CriptVigenere.cpp; sourceTree = "<group>"; };
+		30BC56971B9FE95C00F64AE2 /* CriptVigenere.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = CriptVigenere.h; sourceTree = "<group>"; };
+		30BC56991B9FEB4400F64AE2 /* CriptSubstitution.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = CriptSubstitution.cpp; sourceTree = "<group>"; };
+		30BC569A1B9FEB4400F64AE2 /* CriptSubstitution.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = CriptSubstitution.h; sourceTree = "<group>"; };
+		30BC569C1B9FEE1800F64AE2 /* CriptTranspose.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = CriptTranspose.cpp; sourceTree = "<group>"; };
+		30BC569D1B9FEE1800F64AE2 /* CriptTranspose.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = CriptTranspose.h; sourceTree = "<group>"; };
+		30BC569F1B9FFA2300F64AE2 /* idiomAnalyzer.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = idiomAnalyzer.h; sourceTree = "<group>"; };
 		30C6E39C1B737FE40058E029 /* CriptBreaker */ = {isa = PBXFileReference; explicitFileType = "compiled.mach-o.executable"; includeInIndex = 0; path = CriptBreaker; sourceTree = BUILT_PRODUCTS_DIR; };
-		30C6E39F1B737FE40058E029 /* main.cpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; path = main.cpp; sourceTree = "<group>"; };
+		30C6E39F1B737FE40058E029 /* CriptAnalyzer.cpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; path = CriptAnalyzer.cpp; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -57,7 +76,20 @@
 		30C6E39E1B737FE40058E029 /* CriptBreaker */ = {
 			isa = PBXGroup;
 			children = (
-				30C6E39F1B737FE40058E029 /* main.cpp */,
+				30A7445C1B85F66600CB3EB2 /* idiomAnalyzer.cpp */,
+				30BC569F1B9FFA2300F64AE2 /* idiomAnalyzer.h */,
+				30488EF61B9FDD0A0090DF0A /* CriptTools.cpp */,
+				30488EF81B9FDF1F0090DF0A /* CripTools.h */,
+				30BC56931B9FE72000F64AE2 /* CriptCesar.cpp */,
+				30BC56941B9FE72000F64AE2 /* CriptCesar.h */,
+				30BC569C1B9FEE1800F64AE2 /* CriptTranspose.cpp */,
+				30BC569D1B9FEE1800F64AE2 /* CriptTranspose.h */,
+				30BC56991B9FEB4400F64AE2 /* CriptSubstitution.cpp */,
+				30BC569A1B9FEB4400F64AE2 /* CriptSubstitution.h */,
+				30BC56971B9FE95C00F64AE2 /* CriptVigenere.h */,
+				30BC56961B9FE95C00F64AE2 /* CriptVigenere.cpp */,
+				30488EF91B9FE06E0090DF0A /* CriptAnalyzer.h */,
+				30C6E39F1B737FE40058E029 /* CriptAnalyzer.cpp */,
 			);
 			path = CriptBreaker;
 			sourceTree = "<group>";
@@ -118,7 +150,13 @@
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
-				30C6E3A01B737FE40058E029 /* main.cpp in Sources */,
+				30A7445D1B85F66600CB3EB2 /* idiomAnalyzer.cpp in Sources */,
+				30BC569B1B9FEB4400F64AE2 /* CriptSubstitution.cpp in Sources */,
+				30BC569E1B9FEE1800F64AE2 /* CriptTranspose.cpp in Sources */,
+				30BC56981B9FE95C00F64AE2 /* CriptVigenere.cpp in Sources */,
+				30488EF71B9FDD0A0090DF0A /* CriptTools.cpp in Sources */,
+				30C6E3A01B737FE40058E029 /* CriptAnalyzer.cpp in Sources */,
+				30BC56951B9FE72000F64AE2 /* CriptCesar.cpp in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};

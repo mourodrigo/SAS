@@ -6,67 +6,8 @@
 //  Copyright (c) 2015 mourodrigo. All rights reserved.
 //
 
-#include <iostream>
-#include <vector>
-#include <string>
-#include <fstream>
-
-#define NIL 0
-
-#define FORCEREAD
-
-using namespace std;
-
-typedef unsigned int ui;
-typedef vector<ui> vui;
-
-int printDebug = 1;
-
-
-
-//=======================================
-#pragma mark - Std out
-//=======================================
-
-
-void printUnsigedIntVector(vui vec){
-    cout << endl << "{";
-    for ( vui::iterator ints = (vec).begin(); ints != (vec).end(); ++ ints )
-    {
-        if ((*ints)!=NIL) {
-            cout << (*ints);
-            if (*ints!=vec.at(vec.size()-1)) {
-                cout << " , ";
-            }
-        }else{
-            cout << " , ";
-        }
-    }
-    cout << "}";
-}
-
-void printCharVector(vui vec){
-    for ( vui::iterator ints = (vec).begin(); ints != (vec).end(); ++ ints )
-    {
-        if ((*ints)!=NIL)
-            cout << (char)(*ints);
-    }
-}
-
-string stringOfCharCector(vui vec){
-    string str;
-    for ( vui::iterator ints = (vec).begin(); ints != (vec).end(); ++ ints )
-    {
-        if ((*ints)!=NIL) {
-            if (*ints!=vec.at(vec.size()-1)) {
-            str = str + (char)(*ints);
-          }
-        }
-    }
-    return str;
-}
-
-
+//#include "CripTools.h"
+#include "CriptAnalyzer.h"
 //=======================================
 #pragma mark - Vigenere
 //=======================================
@@ -184,44 +125,35 @@ void decryptTranspose(vui plainText, vui darkText, string outFilePath){
     
 }
 
-//=======================================
-#pragma mark - File Reading
-//=======================================
+vector<idiom> identifyIdiom(vui text){
+    vui used;
+    vector<idiom> idioms = initIdioms();
 
-
-vui fileRead(string filePathIn){
-    FILE *in;
     
-    in = fopen(filePathIn.c_str(), "rb");
-    if(!in) {
-        cout << "Erro: Arquivo nao encontrado " << filePathIn << endl;
-    }
+    //PERCORRE TODO O TEXTO, SE EXISTE NOS USADOS PULA FORA, SE NÃO EXISTE PROCURA EM CADA IDIOMA DA LISTA DE IDIOMAS, SE PERCORRER TODOS OS CARACTERES DESSE IDIOMA E NAO ENCONTRAR NENHUM RETIRA O IDIOMA DA LISTA DE IDIOMAS A PROCURAR, EM SEGUIDA RETORNA OS IDIOMAS POSSIVEIS
     
-    ui character;
-    unsigned char ccharacter;
     
-    vui v;
-    while(character!=255){
-        ccharacter = getc(in);
-        character = ccharacter;
-        if (printDebug) {
-            cout << ccharacter << " - " << character <<  " - " << endl;
+    for (int x = 0; x<text.size(); x++) { //percorre o texto
+        ui c = text.at(x);
+        
+        if (find(used.begin(), used.end(), c)!=used.end()) { //se nao existed no used
+            used.push_back(c);
+            for (int idiomsIndex = 0; idiomsIndex<idioms.size(); idiomsIndex++) {
+                idiom
+                
+            }
         }
-        v.push_back(character);
     }
-    fclose(in);
-
-#ifdef FORCEREAD
-    if (v.size()==0) {
-        return fileRead(filePathIn);
-    }
-#endif
-    return v;
+    
+    return idioms;
+    
 }
 
-
 int main(int argc, const char * argv[]) {
-    // insert code here...
+    
+    vui in = fileRead(string(argv[1]));
+
+    /*    // insert code here...
     std::cout << "CriptBreaker!\n";
     
     char option = '\0';
@@ -269,7 +201,7 @@ int main(int argc, const char * argv[]) {
             
     }
     
-    
+    */
     
     return 0;
 }

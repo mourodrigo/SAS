@@ -17,7 +17,7 @@ unsigned int cesarEncrypt(int in, unsigned int offset){
     return in+(offset%255);
 }
 
-int fileManage(string filePathIn,string filePathOut,unsigned int offset){
+int cesarFileManage(string filePathIn,string filePathOut,unsigned int offset){
     FILE *in;
     ofstream out;
 
@@ -75,10 +75,10 @@ int main(int argc, const char * argv[]) {
     }
     
     if (option == 'c') {
-        fileManage(filePathIn,filePathOut,offset);
+        cesarFileManage(filePathIn,filePathOut,offset);
     }
     if (option == 'd') {
-        fileManage(filePathIn,filePathOut,0-offset);
+        cesarFileManage(filePathIn,filePathOut,0-offset);
     }
     std::cout << "CriptCesar!\n";
 
