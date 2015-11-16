@@ -127,23 +127,27 @@ void decryptTranspose(vui plainText, vui darkText, string outFilePath){
 
 vector<idiom> identifyIdiom(vui text){
     vui used;
-    vector<idiom> idioms = initIdioms();
+//    vector<idiom> idioms = initIdioms();
 
     
     //PERCORRE TODO O TEXTO, SE EXISTE NOS USADOS PULA FORA, SE NÃO EXISTE PROCURA EM CADA IDIOMA DA LISTA DE IDIOMAS, SE PERCORRER TODOS OS CARACTERES DESSE IDIOMA E NAO ENCONTRAR NENHUM RETIRA O IDIOMA DA LISTA DE IDIOMAS A PROCURAR, EM SEGUIDA RETORNA OS IDIOMAS POSSIVEIS
     
-    
-    for (int x = 0; x<text.size(); x++) { //percorre o texto
-        ui c = text.at(x);
-        
-        if (find(used.begin(), used.end(), c)!=used.end()) { //se nao existed no used
-            used.push_back(c);
-            for (int idiomsIndex = 0; idiomsIndex<idioms.size(); idiomsIndex++) {
-                idiom
-                
-            }
-        }
-    }
+//    
+//    for (int x = 0; x<text.size(); x++) { //percorre o texto
+//        ui c = text.at(x);
+//        
+//        if (find(used.begin(), used.end(), c)!=used.end()) { //se nao existed no used
+//            used.push_back(c);
+//            for (int idiomsIndex = 0; idiomsIndex<idioms.size(); idiomsIndex++) {
+//                
+//                    
+////                if (find(i.begin(), i.end(), c)!=i.end()) {
+////                    
+////                }
+//                
+//            }
+//        }
+//    }
     
     return idioms;
     

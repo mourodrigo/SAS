@@ -98,7 +98,7 @@ vui fileManage(vui in,unsigned int offset){
     
     vector<vui> v;
     vui out;
-    int x=0;
+//    int x=0;
     
 //    while(character!=255){
     for (int x = 0; x<in.size(); x++) {

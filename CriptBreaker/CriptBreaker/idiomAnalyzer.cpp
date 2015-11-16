@@ -21,6 +21,14 @@ public:
         }
         idioms = _idioms;
     }
+    
+//    idiom (idiom const &i){
+//        caracteres_allowed = i.caracteres_allowed;
+//        s_caracteres_allowed = i.s_caracteres_allowed;
+//        idioms = i.idioms;
+//    };
+
+    
 };
 
 vector<idiom> initIdioms(){
