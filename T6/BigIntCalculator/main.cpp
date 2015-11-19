@@ -161,8 +161,26 @@ bigIntT MultiplyDigit( int d, bigIntT n) {
     }
 }
 
+int SubtractFromCarry(bigIntT n1){
+    if (n1->finalDigit==0 && n1->leadingDigits) {
+        if (n1->leadingDigits==0 && n1->leadingDigits->leadingDigits) {
+            return SubtractFromCarry(n1->leadingDigits);
+        }else if(n1->finalDigit==0 && n1->leadingDigits>0){
+            n1->leadingDigits->finalDigit--;
+            n1->finalDigit+=10;
+            return 1;
+        }
+        return 0;
+    }else{
+        return 0;
+    }
+}
+
 bigIntT SubtractBigInt(bigIntT n1, bigIntT n2){
     if (n1->finalDigit && n2->finalDigit) {
+        n1->finalDigit = n1->finalDigit-n2->finalDigit;
+    }else if (!n1->finalDigit && n2->finalDigit && SubtractFromCarry(n1)){
+//        n1->finalDigit = n1->finalDigit+10;
         n1->finalDigit = n1->finalDigit-n2->finalDigit;
     }
     if (n1->leadingDigits && n2->leadingDigits) {
@@ -175,17 +193,42 @@ int CompareBigInt(bigIntT n1, bigIntT n2){
     int result=0;
     if (n1->leadingDigits && n2->leadingDigits) {
         result =  CompareBigInt(n1->leadingDigits , n2->leadingDigits);
+    }else if(n1->leadingDigits && !n2->leadingDigits){
+        return 1;
+    }else if (!n1->leadingDigits && n2->leadingDigits){
+        return -1;
     }
     if (result==0){
         if (n1->finalDigit>n2->finalDigit) {
             return 1;
         }else if(n1->finalDigit==n2->finalDigit) {
-            return 0;
+            if (n1->leadingDigits && n2->leadingDigits) {
+                result =  CompareBigInt(n1->leadingDigits , n2->leadingDigits);
+            }else{
+                return 0;
+            }
         }else{
             return -1;
         }
     }
     return result;
+}
+
+bigIntT ModBigInt(bigIntT n1, bigIntT n2){
+    int diff=CompareBigInt(n1, n2);
+    bigIntT zero;
+    zero->finalDigit=0;
+    zero->leadingDigits = NULL;
+    while (diff>=0) {
+        bigIntT lastn1 = n1;
+        
+        n1=SubtractBigInt(n1, n2);
+        if (CompareBigInt(n1, zero)<0) {
+            return lastn1;
+        }
+        diff=CompareBigInt(n1, n2);
+    }
+    return n1;
 }
 
 void euclidianoEstendido(int a, int b, int *alpha, int *beta, int *mdc) {
@@ -262,9 +305,17 @@ int main(int argc, const char * argv[]) {
                 
                 euclidianoEstendido(atoi(a.c_str()), atoi(b.c_str()), alpha, beta, mdc);
                 cout << "alpha " << alpha << "beta " << beta << "mds" << mdc << endl;
-                
                 break;
+
+            case 5:
+                cout << "Dividendo:" ;
+                cin >> a;
+                cout << "Divisor:" ;
+                cin >> b;
                 
+                cout << "Resultado: " << BigIntToString(ModBigInt(StringToBigInt(a), StringToBigInt(b))) << endl;
+                break;
+
             default:
                 break;
         }
