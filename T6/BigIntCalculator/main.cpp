@@ -171,6 +171,23 @@ bigIntT SubtractBigInt(bigIntT n1, bigIntT n2){
     return n1;
 }
 
+int CompareBigInt(bigIntT n1, bigIntT n2){
+    int result=0;
+    if (n1->leadingDigits && n2->leadingDigits) {
+        result =  CompareBigInt(n1->leadingDigits , n2->leadingDigits);
+    }
+    if (result==0){
+        if (n1->finalDigit>n2->finalDigit) {
+            return 1;
+        }else if(n1->finalDigit==n2->finalDigit) {
+            return 0;
+        }else{
+            return -1;
+        }
+    }
+    return result;
+}
+
 int main(int argc, const char * argv[]) {
     // insert code here...
     while (1) {
@@ -203,6 +220,12 @@ int main(int argc, const char * argv[]) {
                 cout << "Resultado: " << BigIntToString(MultiplyBigInt(StringToBigInt(a), StringToBigInt(b))) << endl;
                 break;
             case 4:
+                cout << "Valor a:" ;
+                cin >> a;
+                cout << "Valor b:" ;
+                cin >> b;
+                
+                cout << "Resultado: " << CompareBigInt(StringToBigInt(a), StringToBigInt(b)) << endl;
 
                 break;
                 
