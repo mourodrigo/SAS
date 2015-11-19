@@ -188,12 +188,42 @@ int CompareBigInt(bigIntT n1, bigIntT n2){
     return result;
 }
 
+void euclidianoEstendido(int a, int b, int *alpha, int *beta, int *mdc) {
+    int x[2] = {1, 0};
+    int y[2] = {0, 1};
+    
+    /* Enquanto o resto da divisão de a por b não for zero, eu continuo o algoritmo. */
+    while (a % b != 0) {
+        int quociente = a / b;
+        
+        /* Atualizando os valores de a e b. */
+        int temp = a;
+        a = b;
+        b = temp % b;
+        
+        /* Atualizando os valores de x e y. */
+        int X = x[0] - (x[1] * quociente);
+        int Y = y[0] - (y[1] * quociente);
+        
+        x[0] = x[1];
+        x[1] = X;
+        y[0] = y[1];
+        y[1] = Y;
+    }
+    
+    *mdc = b;
+    *alpha = x[1];
+    *beta = y[1];
+}
+
 int main(int argc, const char * argv[]) {
     // insert code here...
     while (1) {
         string a,b;
-        cout << "\n1 - Soma\n2 - Subtração\n3 - Multiplicação\n4 - Divisão\n\n Opção:";
-        int option;
+        cout << "\n1 - Soma\n2 - Subtração\n3 - Exponenciacao \n4 - Inverso Multiplicativo\n\n Opção:";
+        int option, expoente;
+        int *alpha, *beta, *mdc;
+        bigIntT result,value;
         cin >> option;
         switch (option) {
             case 1:
@@ -212,21 +242,27 @@ int main(int argc, const char * argv[]) {
 
                 break;
             case 3:
-                cout << "Valor a:" ;
+                cout << "Valor Base:" ;
                 cin >> a;
-                cout << "Valor b:" ;
-                cin >> b;
-
-                cout << "Resultado: " << BigIntToString(MultiplyBigInt(StringToBigInt(a), StringToBigInt(b))) << endl;
+                cout << "Valor Expoente:" ;
+                cin >> expoente;
+                result = StringToBigInt(a);
+                value = StringToBigInt(a);
+                while (expoente>0) {
+                    result = MultiplyBigInt(value, result);
+                    expoente--;
+                }
+                cout << "Resultado: " << BigIntToString(result) << endl;
                 break;
             case 4:
-                cout << "Valor a:" ;
+                cout << "Valor Base:" ;
                 cin >> a;
-                cout << "Valor b:" ;
+                cout << "Valor Expoente:" ;
                 cin >> b;
                 
-                cout << "Resultado: " << CompareBigInt(StringToBigInt(a), StringToBigInt(b)) << endl;
-
+                euclidianoEstendido(atoi(a.c_str()), atoi(b.c_str()), alpha, beta, mdc);
+                cout << "alpha " << alpha << "beta " << beta << "mds" << mdc << endl;
+                
                 break;
                 
             default:
