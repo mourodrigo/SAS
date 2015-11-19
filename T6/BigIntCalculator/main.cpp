@@ -161,26 +161,45 @@ bigIntT MultiplyDigit( int d, bigIntT n) {
     }
 }
 
+bigIntT SubtractBigInt(bigIntT n1, bigIntT n2){
+    if (n1->finalDigit && n2->finalDigit) {
+        n1->finalDigit = n1->finalDigit-n2->finalDigit;
+    }
+    if (n1->leadingDigits && n2->leadingDigits) {
+        SubtractBigInt(n1->leadingDigits, n2->leadingDigits);
+    }
+    return n1;
+}
 
 int main(int argc, const char * argv[]) {
     // insert code here...
     while (1) {
         string a,b;
-        cout << "Valor a:" ;
-        cin >> a;
-        cout << "Valor b:" ;
-        cin >> b;
         cout << "\n1 - Soma\n2 - Subtração\n3 - Multiplicação\n4 - Divisão\n\n Opção:";
         int option;
         cin >> option;
         switch (option) {
             case 1:
+                cout << "Valor a:" ;
+                cin >> a;
+                cout << "Valor b:" ;
+                cin >> b;
                 cout << "Resultado: " << BigIntToString(AddBigInt(StringToBigInt(a), StringToBigInt(b))) << endl;
                 break;
             case 2:
+                cout << "Valor a:" ;
+                cin >> a;
+                cout << "Valor b:" ;
+                cin >> b;
+                cout << "Resultado: " << BigIntToString(SubtractBigInt(StringToBigInt(a), StringToBigInt(b))) << endl;
 
                 break;
             case 3:
+                cout << "Valor a:" ;
+                cin >> a;
+                cout << "Valor b:" ;
+                cin >> b;
+
                 cout << "Resultado: " << BigIntToString(MultiplyBigInt(StringToBigInt(a), StringToBigInt(b))) << endl;
                 break;
             case 4:
