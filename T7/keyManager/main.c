@@ -84,13 +84,13 @@ int main(int argc, const char * argv[])
     
         mpz_t n;
         mpz_init (n);
-        printf("\nInsira n ");
+        printf("\nInsira n (valor inteiro primo) ");
         scanf("%s",str);
         mpz_set_str (n, str, base);
     
         mpz_t a;
         mpz_init (a);
-        printf("\nInsira a ");
+        printf("\nInsira a (valor inteiro menor que %s) ",str);
         scanf("%s",str);
         mpz_set_str (a, str, base);
     
