@@ -64,15 +64,15 @@
       </BuildableProductRunnable>
       <CommandLineArguments>
          <CommandLineArgument
-            argument = "40"
-            isEnabled = "YES">
+            argument = "34"
+            isEnabled = "NO">
          </CommandLineArgument>
          <CommandLineArgument
             argument = "-lgmp"
             isEnabled = "NO">
          </CommandLineArgument>
          <CommandLineArgument
-            argument = "40"
+            argument = "10"
             isEnabled = "NO">
          </CommandLineArgument>
       </CommandLineArguments>

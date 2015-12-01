@@ -13,23 +13,12 @@
 #include "include/gmp.h"
 #include <signal.h>
 #include <sys/time.h>
-
-
-#define PUBFILE	"pubkey.rsa"
-#define SECFILE "seckey.rsa"
-
+#define base 10
 volatile unsigned int i, counter, value;
 
 static void handler(void);
 
-/*
- * get_random:
- * return a random integer 0-255
- */
-
-unsigned int
-get_random(void)
-{
+unsigned int get_random(void){ //Busca um valor aleatorio baseado no timestamp
     struct itimerval x, y;
     
     i = 0;
@@ -60,159 +49,89 @@ get_random(void)
     return value;
 }
 
-/*
- * handler:
- * the SIGALRM handler
- */
-
-void
-handler(void)
-{
+void handler(void) {
     value = (value << 1) | (i & 0x1);
     counter++;
     i = 0;
     signal(SIGALRM, handler);
 }
 
-/*
- * the key files are of the form:
- * modulus				in hex
- * key component (secret or public accordingly) also in hex
- */
 
-main(int argc, char **argv)
-{
+int main(int argc, char **argv){
     MP_INT p, q, phi, n;
-    int i, k, bits, nibbles, encrypt_key = 0;
+    int i, bits, rdm, pp = 0;
     char *buf, *n_buf;
-    FILE *fp1, *fp2;
     
-    if (argc < 2)
-    {
-        fprintf(stderr, "Usage: %s <modulus> [<public exponent>]\n", argv[0]);
-        fprintf(stderr, "\tgive modulus size in bits\n");
-        fprintf(stderr, "\toptionally give your choice of public exponent\n");
-        exit(-1);
-    }
+    bits = 32;
     
-    bits = atoi(argv[1]);
-    if (bits < 32)
-    {
-        fprintf(stderr, "Invalid keysize.\n");
-        exit(-1);
-    }
-    nibbles = (bits + 3)/ 4;
+    rdm = 32;
     
-    i = nibbles;
+    i = rdm;
     
-    if ( argc > 2 )
-    {
-        encrypt_key = atoi(argv[2]);
-    }
-try_again:
-    mpz_init_set_ui(&p, 0);				/* Get a "random" p */
-    while ((i -= 2) > 0)
-    {
-        mpz_mul_ui(&p, &p, 16);
-        mpz_add_ui(&p, &p, get_random());
-    }
+    printf("Insira um valor para p ");
+    scanf("%d", &pp);
     
-    while (!mpz_probab_prime_p(&p, 25))	/* Find a prime */
-        mpz_add_ui(&p, &p, 1);
+start:
+    mpz_init_set_ui(&p,pp);
     
-    fprintf(stderr, "Got one prime.\n");
+    i = rdm;
+
+    printf("\nBuscando valor para q ");
+
     
-    i = nibbles;
-    
-    mpz_init_set_ui(&q, 0);                         /* Get a "random" q */
-    while ((i -= 2) > 0)
-    {
-        mpz_mul_ui(&q, &q, 16);
+    mpz_init_set_ui(&q, 0);//busca um valor para q
+    while ((i -= 2) > 0){
+        mpz_mul_ui(&q, &q, base);
         mpz_add_ui(&q, &q, get_random());
     }
     
-    while (!mpz_probab_prime_p(&q, 25))	/* Find a prime */
+    while (!mpz_probab_prime_p(&q, 25))
         mpz_add_ui(&q, &q, 1);
     
-    fprintf(stderr, "Got second prime.\n");
     
+    printf("\nValor primo para q encontrado ");
+    mpz_out_str (stdout, 10, &q);
+    
+    printf("\nCalculando modulo n = p^q ");
     mpz_init(&n);
-    mpz_mul(&n, &p, &q);			/* Calculate the RSA modulus */
+    mpz_mul(&n, &p, &q);
     
-    fp1 = fopen(SECFILE, "w");
-    if (fp1 == (FILE *) NULL)
-    {
-        perror(SECFILE);
-        exit(-1);
-    }
+    n_buf = mpz_get_str((char *) NULL, base, &n);
     
-    fp2 = fopen(PUBFILE, "w");
-    if (fp2 == (FILE *) NULL)
-    {
-        perror(PUBFILE);
-        exit(-1);
-    }
-    
-    n_buf = mpz_get_str((char *) NULL, 16, &n);
     
     mpz_sub_ui(&p, &p, 1);
     mpz_sub_ui(&q, &q, 1);
     mpz_init(&phi);
-    mpz_mul(&phi, &p, &q);			/* Calculate (p - 1)*(q - 1) */
+    mpz_mul(&phi, &p, &q);
     mpz_clear(&p);
     
-    i = nibbles;
+    mpz_init_set_ui(&p,pp);
     
-    if (encrypt_key)
-    {					/* user chosen */
-        mpz_init_set_ui(&p,encrypt_key);/* small public exponent */
-    }
-    else
-    {
-        mpz_init_set_ui(&p, 0);		/* Get a "random" secret */
-        while ((i--) > 0)
-        {
-            mpz_mul_ui(&p, &p, 16);
-            mpz_add_ui(&p, &p, get_random());
-        }
-        
-        while (mpz_cmp(&p, &n) >= 0)	/* Chop it if larger than n */
-            mpz_div_ui(&p, &p, 2);
-        
-        do
-        {
-            mpz_add_ui(&p, &p, 1);
-            mpz_gcd(&q, &p, &phi);		/* Get the GCD */
-        } while (mpz_cmp_ui(&q, 1) && mpz_cmp(&q,&phi)<=0);		/* until it is 1 */
-    }
-    buf = mpz_get_str((char *) NULL, 16, &p);
+    printf("\nCalculando  d = e-1 (mod φ(N))");
+
+    buf = mpz_get_str((char *) NULL, base, &p);
     mpz_gcdext(&p, &q, &p, &p, &phi);
     
-    if ( !mpz_cmp_ui(&q,1) || mpz_cmp(&q,&phi) >= 0)
+    if ( !mpz_cmp_ui(&q,1) || mpz_cmp(&q,&phi) >= 0) // verifica se é coprimo
     {
-        fprintf( stderr, "failed to find d, starting again\n" );
-        goto try_again;
+        goto start;
     }
     
-    printf("\nCHAVE PUBLICA: \n\ne = %s\n", buf);
+    printf("\n\nCHAVE PUBLICA: \n\ne = %s\n", buf);
     printf("n = %s\n", n_buf);
     free(buf);
     
     mpz_clear(&p);
     
-    if (mpz_cmp_ui(&q, 0) < 0)		/* If negative, add modulus */
+    if (mpz_cmp_ui(&q, 0) < 0)//se o valor é negativo aplica modulo
         mpz_add(&q, &q, &phi);
     
     mpz_clear(&phi);
     
-    buf = mpz_get_str((char *) NULL, 16, &q);
+    buf = mpz_get_str((char *) NULL, base, &q);
     printf("\n\nCHAVE PRIVADA: \n\nd = %s\n", buf);
-    printf("n = %s\n", n_buf);
+    printf("n = %s\n\n", n_buf);
     free(buf);
-    
-    
-    fclose(fp1);
-    fclose(fp2);
     
     mpz_clear(&q);
     exit(0);
