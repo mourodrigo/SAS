@@ -234,8 +234,10 @@ bigIntT ModBigInt(bigIntT n1, bigIntT n2){
 void euclidianoEstendido(int a, int b, int *alpha, int *beta, int *mdc) {
     int x[2] = {1, 0};
     int y[2] = {0, 1};
-    
-    /* Enquanto o resto da divisão de a por b não for zero, eu continuo o algoritmo. */
+//    mdc=0;
+//    beta=0;
+//    alpha=0;
+//    /* Enquanto o resto da divisão de a por b não for zero, eu continuo o algoritmo. */
     while (a % b != 0) {
         int quociente = a / b;
         
@@ -263,61 +265,96 @@ int main(int argc, const char * argv[]) {
     // insert code here...
     while (1) {
         string a,b;
-        cout << "\n1 - Soma\n2 - Subtração\n3 - Exponenciacao \n4 - Inverso Multiplicativo\n\n Opção:";
-        int option, expoente;
-        int *alpha, *beta, *mdc;
+        int option,expoente;
+        int alpha, beta, mdc =0;
         bigIntT result,value;
-        cin >> option;
+        string resultstdout = "Resultado: ";
+        if (argc<4) {
+            cout << "\n1 - Soma\n2 - Multiplicação\n3 - Exponenciacao \n4 - Inverso Multiplicativo\n\n Opção:";
+            cin >> option;
+        }else{
+            option = atoi(argv[1]);
+            a = string(argv[2]);
+            b = string(argv[3]);
+            resultstdout="";
+        }
         switch (option) {
             case 1:
-                cout << "Valor a:" ;
-                cin >> a;
-                cout << "Valor b:" ;
-                cin >> b;
-                cout << "Resultado: " << BigIntToString(AddBigInt(StringToBigInt(a), StringToBigInt(b))) << endl;
+                if(strcmp("",a.c_str())==0){
+                    cout << "Valor a:" ;
+                    cin >> a;
+                }
+                if(strcmp("",b.c_str())==0){
+                    cout << "Valor b:" ;
+                    cin >> b;
+                }
+                cout <<resultstdout<< BigIntToString(AddBigInt(StringToBigInt(a), StringToBigInt(b))) << endl;
                 break;
             case 2:
-                cout << "Valor a:" ;
-                cin >> a;
-                cout << "Valor b:" ;
-                cin >> b;
-                cout << "Resultado: " << BigIntToString(SubtractBigInt(StringToBigInt(a), StringToBigInt(b))) << endl;
+                if(strcmp("",a.c_str())==0){
+                    cout << "Valor a:" ;
+                    cin >> a;
+                }
+                if(strcmp("",b.c_str())==0){
+                    cout << "Valor b:" ;
+                    cin >> b;
+                }
+                cout <<resultstdout<< BigIntToString(MultiplyBigInt(StringToBigInt(a), StringToBigInt(b))) << endl;
 
                 break;
             case 3:
-                cout << "Valor Base:" ;
-                cin >> a;
-                cout << "Valor Expoente:" ;
-                cin >> expoente;
+                if(strcmp("",a.c_str())==0){
+                    cout << "Valor Base:" ;
+                    cin >> a;
+                }
+                
+                if(strcmp("",b.c_str())==0){
+                    cout << "Valor Expoente:" ;
+                    cin >> b;
+                }
+                expoente = atoi(b.c_str());
                 result = StringToBigInt(a);
                 value = StringToBigInt(a);
-                while (expoente>0) {
+                while (expoente>1) {
                     result = MultiplyBigInt(value, result);
                     expoente--;
                 }
-                cout << "Resultado: " << BigIntToString(result) << endl;
+                cout <<resultstdout<< BigIntToString(result) << endl;
                 break;
             case 4:
-                cout << "Valor Base:" ;
-                cin >> a;
-                cout << "Valor Expoente:" ;
-                cin >> b;
                 
-                euclidianoEstendido(atoi(a.c_str()), atoi(b.c_str()), alpha, beta, mdc);
-                cout << "alpha " << alpha << "beta " << beta << "mds" << mdc << endl;
+                if(strcmp("",a.c_str())==0) {
+                    cout << "Valor Base:" ;
+                    cin >> a;
+                }
+                if(strcmp("",b.c_str())==0){
+                    cout << "Valor Expoente:" ;
+                    cin >> b;
+                }
+                
+                euclidianoEstendido(atoi(a.c_str()), atoi(b.c_str()), &alpha, &beta, &mdc);
+                if (argc>1) {
+                    cout << "\n" << alpha << "\n" << beta << "\n" << mdc << endl;
+                }else{
+                    cout << "alpha " << alpha << " beta " << beta << " MDC: " << mdc << endl;
+                }
                 break;
 
             case 5:
                 cout << "Dividendo:" ;
-                cin >> a;
+                if(strcmp("",a.c_str())==0) cin >> a;
                 cout << "Divisor:" ;
-                cin >> b;
-                
-                cout << "Resultado: " << BigIntToString(ModBigInt(StringToBigInt(a), StringToBigInt(b))) << endl;
+                if(strcmp("",b.c_str())==0) cin >> b;
+                cout <<resultstdout<< BigIntToString(ModBigInt(StringToBigInt(a), StringToBigInt(b))) << endl;
                 break;
 
             default:
+                free(&a);
+                free(&b);
                 break;
+        }
+        if (argc>1) {
+            break;
         }
     }
     
