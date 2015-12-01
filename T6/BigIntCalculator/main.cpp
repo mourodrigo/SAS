@@ -153,7 +153,7 @@ bigIntT MultiplyBigInt( bigIntT n1, bigIntT n2) {
 
 bigIntT MultiplyDigit( int d, bigIntT n) {
     bigIntT b;
-    if (d == 0)
+    if (d <= 0)
         return NULL;
     else {
         b = MultiplyDigit( d - 1, n);
@@ -161,31 +161,78 @@ bigIntT MultiplyDigit( int d, bigIntT n) {
     }
 }
 
-int SubtractFromCarry(bigIntT n1){
-    if (n1->finalDigit==0 && n1->leadingDigits) {
-        if (n1->leadingDigits==0 && n1->leadingDigits->leadingDigits) {
-            return SubtractFromCarry(n1->leadingDigits);
-        }else if(n1->finalDigit==0 && n1->leadingDigits>0){
-            n1->leadingDigits->finalDigit--;
-            n1->finalDigit+=10;
-            return 1;
-        }
-        return 0;
+bigIntT setNUllForLeadingDigits(bigIntT n){
+    if (!n) {
+        return NULL;
+    }
+    if (n->leadingDigits) {
+        n->leadingDigits=setNUllForLeadingDigits(n->leadingDigits);
+    }
+    if (!n->leadingDigits&&n->finalDigit==0) {
+        return NULL;
     }else{
+        return n;
+    }
+    
+}
+
+int SubtractFromCarry(bigIntT n1){
+//    if (n1->finalDigit==0 && n1->leadingDigits) {
+//        if (n1->leadingDigits==0 && n1->leadingDigits->leadingDigits) {
+//            return SubtractFromCarry(n1->leadingDigits);
+//        }else if(n1->finalDigit==0 && n1->leadingDigits>0){
+//            n1->leadingDigits->finalDigit--;
+//            n1->finalDigit+=10;
+//            return 1;
+//        }
+//        return 0;
+//    }else{
+//        return 0;
+//    }
+    if (n1->leadingDigits==0&&!n1->leadingDigits) {
+        n1->leadingDigits=NULL;
+        n1=NULL;
         return 0;
     }
+    if (n1->leadingDigits->finalDigit==0) {
+        SubtractFromCarry(n1->leadingDigits);
+    }
+    n1->leadingDigits->finalDigit--;
+    if (n1->leadingDigits->finalDigit<0) {
+        return 0;
+    }
+    n1->finalDigit+=10;
+    if(!n1->leadingDigits->leadingDigits && n1->leadingDigits==0){
+        n1->leadingDigits=NULL;
+        n1=NULL;
+    }
+    return 1;
 }
 
 bigIntT SubtractBigInt(bigIntT n1, bigIntT n2){
-    if (n1->finalDigit && n2->finalDigit) {
-        n1->finalDigit = n1->finalDigit-n2->finalDigit;
-    }else if (!n1->finalDigit && n2->finalDigit && SubtractFromCarry(n1)){
-//        n1->finalDigit = n1->finalDigit+10;
-        n1->finalDigit = n1->finalDigit-n2->finalDigit;
+    if (!n2) {
+        return n1;
     }
-    if (n1->leadingDigits && n2->leadingDigits) {
+    if (!n1&&n2) {
+        n2->finalDigit=0-n2->finalDigit;
+        return n2;
+    }
+    if (n1->finalDigit<n2->finalDigit) {
+        if (SubtractFromCarry(n1)<1) return n1;
+    }
+    n1->finalDigit-=n2->finalDigit;
+    while (n1->leadingDigits && n2->leadingDigits) {
         SubtractBigInt(n1->leadingDigits, n2->leadingDigits);
     }
+//    if (n1->finalDigit && n2->finalDigit) {
+//        n1->finalDigit = n1->finalDigit-n1->finalDigit;
+//    }else if (!n1->finalDigit && n2->finalDigit && SubtractFromCarry(n1)){
+////        n1->finalDigit = n1->finalDigit+10;
+//        n1->finalDigit = n1->finalDigit-n2->finalDigit;
+//    }
+//    if (n1->leadingDigits && n2->leadingDigits) {
+//        SubtractBigInt(n1->leadingDigits, n2->leadingDigits);
+//    }
     return n1;
 }
 
@@ -215,18 +262,22 @@ int CompareBigInt(bigIntT n1, bigIntT n2){
 }
 
 bigIntT ModBigInt(bigIntT n1, bigIntT n2){
-    int diff=CompareBigInt(n1, n2);
-    bigIntT zero;
-    zero->finalDigit=0;
-    zero->leadingDigits = NULL;
-    while (diff>=0) {
-        bigIntT lastn1 = n1;
-        
-        n1=SubtractBigInt(n1, n2);
-        if (CompareBigInt(n1, zero)<0) {
-            return lastn1;
+//    int diff=CompareBigInt(n1, n2);
+    
+    while (1) {
+        setNUllForLeadingDigits(n1);
+        if (!n1&&n2) {
+            return n2;
         }
-        diff=CompareBigInt(n1, n2);
+        if (n1->finalDigit<n2->finalDigit && !n1->leadingDigits) {
+            return n1;
+        }else{
+            n1=SubtractBigInt(n1, n2);
+        }
+//        if (CompareBigInt(n1, zero)<0) {
+//            return lastn1;
+//        }
+//        diff=CompareBigInt(n1, n2);
     }
     return n1;
 }
@@ -234,8 +285,10 @@ bigIntT ModBigInt(bigIntT n1, bigIntT n2){
 void euclidianoEstendido(int a, int b, int *alpha, int *beta, int *mdc) {
     int x[2] = {1, 0};
     int y[2] = {0, 1};
-    
-    /* Enquanto o resto da divisão de a por b não for zero, eu continuo o algoritmo. */
+//    mdc=0;
+//    beta=0;
+//    alpha=0;
+//    /* Enquanto o resto da divisão de a por b não for zero, eu continuo o algoritmo. */
     while (a % b != 0) {
         int quociente = a / b;
         
@@ -259,65 +312,133 @@ void euclidianoEstendido(int a, int b, int *alpha, int *beta, int *mdc) {
     *beta = y[1];
 }
 
+
+void extendedEuclideanAlgorithm(bigIntT a, bigIntT b, bigIntT *alpha, bigIntT *beta, bigIntT *mdc) {
+    bigIntT x[2] = {StringToBigInt("1"), StringToBigInt("0")};
+    bigIntT y[2] = {StringToBigInt("0"), StringToBigInt("1")};
+    //    mdc=0;
+    //    beta=0;
+    //    alpha=0;
+    //    /* Enquanto o resto da divisão de a por b não for zero, eu continuo o algoritmo. */
+    while (ModBigInt(a, b)->finalDigit!=0) {
+        bigIntT quociente = ModBigInt(a, b);
+        
+        /* Atualizando os valores de a e b. */
+        bigIntT temp = StringToBigInt(BigIntToString(a));
+        a = b;
+        b = ModBigInt(temp, b);
+        
+        /* Atualizando os valores de x e y. */
+        bigIntT X = SubtractBigInt(x[0], MultiplyBigInt(x[1], quociente));
+        bigIntT Y = SubtractBigInt(y[0], MultiplyBigInt(y[1], quociente));
+        
+        x[0] = x[1];
+        x[1] = X;
+        y[0] = y[1];
+        y[1] = Y;
+    }
+    
+    *mdc = b;
+    *alpha = x[1];
+    *beta = y[1];
+}
+
+
 int main(int argc, const char * argv[]) {
     // insert code here...
     while (1) {
         string a,b;
-        cout << "\n1 - Soma\n2 - Subtração\n3 - Exponenciacao \n4 - Inverso Multiplicativo\n\n Opção:";
-        int option, expoente;
-        int *alpha, *beta, *mdc;
+        int option,expoente;
+        bigIntT alpha, beta, mdc;
         bigIntT result,value;
-        cin >> option;
+        string resultstdout = "Resultado: ";
+        if (argc<4) {
+            cout << "\n1 - Soma\n2 - Multiplicação\n3 - Exponenciacao \n4 - Inverso Multiplicativo\n\n Opção:";
+            cin >> option;
+        }else{
+            option = atoi(argv[1]);
+            a = string(argv[2]);
+            b = string(argv[3]);
+            resultstdout="";
+        }
         switch (option) {
             case 1:
-                cout << "Valor a:" ;
-                cin >> a;
-                cout << "Valor b:" ;
-                cin >> b;
-                cout << "Resultado: " << BigIntToString(AddBigInt(StringToBigInt(a), StringToBigInt(b))) << endl;
+                if(strcmp("",a.c_str())==0){
+                    cout << "Valor a:" ;
+                    cin >> a;
+                }
+                if(strcmp("",b.c_str())==0){
+                    cout << "Valor b:" ;
+                    cin >> b;
+                }
+                cout <<resultstdout<< BigIntToString(AddBigInt(StringToBigInt(a), StringToBigInt(b))) << endl;
                 break;
             case 2:
-                cout << "Valor a:" ;
-                cin >> a;
-                cout << "Valor b:" ;
-                cin >> b;
-                cout << "Resultado: " << BigIntToString(SubtractBigInt(StringToBigInt(a), StringToBigInt(b))) << endl;
+                if(strcmp("",a.c_str())==0){
+                    cout << "Valor a:" ;
+                    cin >> a;
+                }
+                if(strcmp("",b.c_str())==0){
+                    cout << "Valor b:" ;
+                    cin >> b;
+                }
+                cout <<resultstdout<< BigIntToString(MultiplyBigInt(StringToBigInt(a), StringToBigInt(b))) << endl;
 
                 break;
             case 3:
-                cout << "Valor Base:" ;
-                cin >> a;
-                cout << "Valor Expoente:" ;
-                cin >> expoente;
+                if(strcmp("",a.c_str())==0){
+                    cout << "Valor Base:" ;
+                    cin >> a;
+                }
+                
+                if(strcmp("",b.c_str())==0){
+                    cout << "Valor Expoente:" ;
+                    cin >> b;
+                }
+                expoente = atoi(b.c_str());
                 result = StringToBigInt(a);
                 value = StringToBigInt(a);
-                while (expoente>0) {
+                while (expoente>1) {
                     result = MultiplyBigInt(value, result);
                     expoente--;
                 }
-                cout << "Resultado: " << BigIntToString(result) << endl;
+                cout <<resultstdout<< BigIntToString(result) << endl;
                 break;
             case 4:
-                cout << "Valor Base:" ;
-                cin >> a;
-                cout << "Valor Expoente:" ;
-                cin >> b;
                 
-                euclidianoEstendido(atoi(a.c_str()), atoi(b.c_str()), alpha, beta, mdc);
-                cout << "alpha " << alpha << "beta " << beta << "mds" << mdc << endl;
+                if(strcmp("",a.c_str())==0) {
+                    cout << "Valor Base:" ;
+                    cin >> a;
+                }
+                if(strcmp("",b.c_str())==0){
+                    cout << "Valor Expoente:" ;
+                    cin >> b;
+                }
+                
+//                euclidianoEstendido(atoi(a.c_str()), atoi(b.c_str()), &alpha, &beta, &mdc);
+                extendedEuclideanAlgorithm(StringToBigInt(a), StringToBigInt(b), &alpha, &beta, &mdc);
+                if (argc>1) {
+                    cout << "\n" << alpha << "\n" << beta << "\n" << mdc << endl;
+                }else{
+                    cout << "alpha " << BigIntToString(alpha) << " beta " << BigIntToString(beta) << " MDC: " << BigIntToString(mdc) << endl;
+                }
                 break;
 
             case 5:
                 cout << "Dividendo:" ;
-                cin >> a;
+                if(strcmp("",a.c_str())==0) cin >> a;
                 cout << "Divisor:" ;
-                cin >> b;
-                
-                cout << "Resultado: " << BigIntToString(ModBigInt(StringToBigInt(a), StringToBigInt(b))) << endl;
+                if(strcmp("",b.c_str())==0) cin >> b;
+                cout <<resultstdout<< BigIntToString(ModBigInt(StringToBigInt(a), StringToBigInt(b))) << endl;
                 break;
 
             default:
+                free(&a);
+                free(&b);
                 break;
+        }
+        if (argc>1) {
+            break;
         }
     }
     
