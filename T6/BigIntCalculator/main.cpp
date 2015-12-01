@@ -161,31 +161,68 @@ bigIntT MultiplyDigit( int d, bigIntT n) {
     }
 }
 
-int SubtractFromCarry(bigIntT n1){
-    if (n1->finalDigit==0 && n1->leadingDigits) {
-        if (n1->leadingDigits==0 && n1->leadingDigits->leadingDigits) {
-            return SubtractFromCarry(n1->leadingDigits);
-        }else if(n1->finalDigit==0 && n1->leadingDigits>0){
-            n1->leadingDigits->finalDigit--;
-            n1->finalDigit+=10;
-            return 1;
-        }
-        return 0;
+bigIntT setNUllForLeadingDigits(bigIntT n){
+    if (n->leadingDigits) {
+        n->leadingDigits=setNUllForLeadingDigits(n->leadingDigits);
+    }
+    if (!n->leadingDigits&&n->finalDigit==0) {
+        return NULL;
     }else{
+        return n;
+    }
+    
+}
+
+int SubtractFromCarry(bigIntT n1){
+//    if (n1->finalDigit==0 && n1->leadingDigits) {
+//        if (n1->leadingDigits==0 && n1->leadingDigits->leadingDigits) {
+//            return SubtractFromCarry(n1->leadingDigits);
+//        }else if(n1->finalDigit==0 && n1->leadingDigits>0){
+//            n1->leadingDigits->finalDigit--;
+//            n1->finalDigit+=10;
+//            return 1;
+//        }
+//        return 0;
+//    }else{
+//        return 0;
+//    }
+    if (n1->leadingDigits==0&&!n1->leadingDigits) {
+        n1->leadingDigits=NULL;
+        n1=NULL;
         return 0;
     }
+    if (n1->leadingDigits->finalDigit==0) {
+        SubtractFromCarry(n1->leadingDigits);
+    }
+    n1->leadingDigits->finalDigit--;
+    if (n1->leadingDigits->finalDigit<0) {
+        return 0;
+    }
+    n1->finalDigit+=10;
+    if(!n1->leadingDigits->leadingDigits && n1->leadingDigits==0){
+        n1->leadingDigits=NULL;
+        n1=NULL;
+    }
+    return 1;
 }
 
 bigIntT SubtractBigInt(bigIntT n1, bigIntT n2){
-    if (n1->finalDigit && n2->finalDigit) {
-        n1->finalDigit = n1->finalDigit-n2->finalDigit;
-    }else if (!n1->finalDigit && n2->finalDigit && SubtractFromCarry(n1)){
-//        n1->finalDigit = n1->finalDigit+10;
-        n1->finalDigit = n1->finalDigit-n2->finalDigit;
+    if (n1->finalDigit<n2->finalDigit) {
+        if (SubtractFromCarry(n1)<1) return n1;
     }
-    if (n1->leadingDigits && n2->leadingDigits) {
+    n1->finalDigit-=n2->finalDigit;
+    while (n1->leadingDigits && n2->leadingDigits) {
         SubtractBigInt(n1->leadingDigits, n2->leadingDigits);
     }
+//    if (n1->finalDigit && n2->finalDigit) {
+//        n1->finalDigit = n1->finalDigit-n1->finalDigit;
+//    }else if (!n1->finalDigit && n2->finalDigit && SubtractFromCarry(n1)){
+////        n1->finalDigit = n1->finalDigit+10;
+//        n1->finalDigit = n1->finalDigit-n2->finalDigit;
+//    }
+//    if (n1->leadingDigits && n2->leadingDigits) {
+//        SubtractBigInt(n1->leadingDigits, n2->leadingDigits);
+//    }
     return n1;
 }
 
@@ -221,8 +258,12 @@ bigIntT ModBigInt(bigIntT n1, bigIntT n2){
     zero->leadingDigits = NULL;
     while (diff>=0) {
         bigIntT lastn1 = n1;
-        
-        n1=SubtractBigInt(n1, n2);
+        setNUllForLeadingDigits(n1);
+        if (n1->finalDigit<n2->finalDigit && !n1->leadingDigits) {
+            return n1;
+        }else{
+            n1=SubtractBigInt(n1, n2);
+        }
         if (CompareBigInt(n1, zero)<0) {
             return lastn1;
         }
