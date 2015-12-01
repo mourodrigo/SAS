@@ -153,7 +153,7 @@ bigIntT MultiplyBigInt( bigIntT n1, bigIntT n2) {
 
 bigIntT MultiplyDigit( int d, bigIntT n) {
     bigIntT b;
-    if (d == 0)
+    if (d <= 0)
         return NULL;
     else {
         b = MultiplyDigit( d - 1, n);
@@ -162,6 +162,9 @@ bigIntT MultiplyDigit( int d, bigIntT n) {
 }
 
 bigIntT setNUllForLeadingDigits(bigIntT n){
+    if (!n) {
+        return NULL;
+    }
     if (n->leadingDigits) {
         n->leadingDigits=setNUllForLeadingDigits(n->leadingDigits);
     }
@@ -207,6 +210,13 @@ int SubtractFromCarry(bigIntT n1){
 }
 
 bigIntT SubtractBigInt(bigIntT n1, bigIntT n2){
+    if (!n2) {
+        return n1;
+    }
+    if (!n1&&n2) {
+        n2->finalDigit=0-n2->finalDigit;
+        return n2;
+    }
     if (n1->finalDigit<n2->finalDigit) {
         if (SubtractFromCarry(n1)<1) return n1;
     }
@@ -252,22 +262,22 @@ int CompareBigInt(bigIntT n1, bigIntT n2){
 }
 
 bigIntT ModBigInt(bigIntT n1, bigIntT n2){
-    int diff=CompareBigInt(n1, n2);
-    bigIntT zero;
-    zero->finalDigit=0;
-    zero->leadingDigits = NULL;
-    while (diff>=0) {
-        bigIntT lastn1 = n1;
+//    int diff=CompareBigInt(n1, n2);
+    
+    while (1) {
         setNUllForLeadingDigits(n1);
+        if (!n1&&n2) {
+            return n2;
+        }
         if (n1->finalDigit<n2->finalDigit && !n1->leadingDigits) {
             return n1;
         }else{
             n1=SubtractBigInt(n1, n2);
         }
-        if (CompareBigInt(n1, zero)<0) {
-            return lastn1;
-        }
-        diff=CompareBigInt(n1, n2);
+//        if (CompareBigInt(n1, zero)<0) {
+//            return lastn1;
+//        }
+//        diff=CompareBigInt(n1, n2);
     }
     return n1;
 }
@@ -302,12 +312,44 @@ void euclidianoEstendido(int a, int b, int *alpha, int *beta, int *mdc) {
     *beta = y[1];
 }
 
+
+void extendedEuclideanAlgorithm(bigIntT a, bigIntT b, bigIntT *alpha, bigIntT *beta, bigIntT *mdc) {
+    bigIntT x[2] = {StringToBigInt("1"), StringToBigInt("0")};
+    bigIntT y[2] = {StringToBigInt("0"), StringToBigInt("1")};
+    //    mdc=0;
+    //    beta=0;
+    //    alpha=0;
+    //    /* Enquanto o resto da divisão de a por b não for zero, eu continuo o algoritmo. */
+    while (ModBigInt(a, b)->finalDigit!=0) {
+        bigIntT quociente = ModBigInt(a, b);
+        
+        /* Atualizando os valores de a e b. */
+        bigIntT temp = StringToBigInt(BigIntToString(a));
+        a = b;
+        b = ModBigInt(temp, b);
+        
+        /* Atualizando os valores de x e y. */
+        bigIntT X = SubtractBigInt(x[0], MultiplyBigInt(x[1], quociente));
+        bigIntT Y = SubtractBigInt(y[0], MultiplyBigInt(y[1], quociente));
+        
+        x[0] = x[1];
+        x[1] = X;
+        y[0] = y[1];
+        y[1] = Y;
+    }
+    
+    *mdc = b;
+    *alpha = x[1];
+    *beta = y[1];
+}
+
+
 int main(int argc, const char * argv[]) {
     // insert code here...
     while (1) {
         string a,b;
         int option,expoente;
-        int alpha, beta, mdc =0;
+        bigIntT alpha, beta, mdc;
         bigIntT result,value;
         string resultstdout = "Resultado: ";
         if (argc<4) {
@@ -373,11 +415,12 @@ int main(int argc, const char * argv[]) {
                     cin >> b;
                 }
                 
-                euclidianoEstendido(atoi(a.c_str()), atoi(b.c_str()), &alpha, &beta, &mdc);
+//                euclidianoEstendido(atoi(a.c_str()), atoi(b.c_str()), &alpha, &beta, &mdc);
+                extendedEuclideanAlgorithm(StringToBigInt(a), StringToBigInt(b), &alpha, &beta, &mdc);
                 if (argc>1) {
                     cout << "\n" << alpha << "\n" << beta << "\n" << mdc << endl;
                 }else{
-                    cout << "alpha " << alpha << " beta " << beta << " MDC: " << mdc << endl;
+                    cout << "alpha " << BigIntToString(alpha) << " beta " << BigIntToString(beta) << " MDC: " << BigIntToString(mdc) << endl;
                 }
                 break;
 
