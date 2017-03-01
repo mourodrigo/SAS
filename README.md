@@ -1,10 +1,15 @@
-#Segurança e Auditoria de Sistemas
+**Security and System Auditing**
+----------
+A series of algorithms for the Security and System Auditing class of the [Universidade Federal da Fronteira Sul](http://uffs.edu.br/index.php)
 
-**Implementação.**
-Os códigos foram implementado em C++ utilizando bibliotecas string, fstream e iostream.
+Implementation
+----------
+The algorithms where implemented using C++ language and also libraries like fstream and iostream
 
-**Utilização.**
-./main [opção] [caminho do arquivo de entrada] [caminho do arquivo de saida] [offset]
+Usage
+----------
+On bash:
+./main [option] [input file] [output file] [offset]
 
 Opções: 
 C - Criptografar
