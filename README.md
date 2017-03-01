@@ -1,10 +1,6 @@
-**Security and System Auditing**
+**Segurana e auditoria de sistemas**
 ----------
-A series of algorithms for the Security and System Auditing class of the [Universidade Federal da Fronteira Sul](http://uffs.edu.br/index.php)
-
-Implementation
-----------
-The algorithms where implemented using C++ language and also libraries like fstream and iostream
+Uma série de algoritmos implementados para a disciplina de Segurana e auditoria de sistemas da [Universidade Federal da Fronteira Sul](http://uffs.edu.br/index.php)
 
 Usage
 ----------
